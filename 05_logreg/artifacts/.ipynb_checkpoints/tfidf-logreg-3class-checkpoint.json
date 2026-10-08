@@ -1,0 +1,27 @@
+{
+  "dataset": "data/hf-dataset-3class-full",
+  "label_mapping": {
+    "human": 0,
+    "ai": 1,
+    "ai_assisted": 2
+  },
+  "model_type": "TF-IDF + Logistic Regression",
+  "best_parameters": {
+    "logreg__C": 3.0,
+    "tfidf__min_df": 5,
+    "tfidf__ngram_range": [
+      1,
+      2
+    ]
+  },
+  "cross_validation_accuracy": 0.9095100283466587,
+  "validation_accuracy": 0.9146593255333793,
+  "test_accuracy": 0.9123127511874315,
+  "python_version": "3.13.12",
+  "package_versions": {
+    "datasets": "5.0.1",
+    "joblib": "1.6.0",
+    "numpy": "2.4.6",
+    "scikit-learn": "1.9.1"
+  }
+}
