@@ -9,6 +9,29 @@ Unlike a binary Human-vs-AI detector, this project treats **AI-assisted writing*
 > **Status:** the dataset pipeline, six supervised models with held-out test results, a zero-shot LLM baseline, length-bias analysis, and learning curves are complete.
 
 
+## Repository guide
+
+| Stage | Folder | Purpose |
+| ---: | --- | --- |
+| 01 | [`01_human-data`](./01_human-data/) | Collect and clean German academic human text |
+| 02 | [`02_ai-generated-data`](./02_ai-generated-data/) | Generate AI and AI-assisted counterparts |
+| 03 | [`03_pangram-test`](./03_pangram-test/) | External Human-vs-AI sanity check |
+| 04 | [`04_hf-dataset`](./04_hf-dataset/) | Build the final Hugging Face dataset |
+| 05 | [`05_logreg-baseline`](./05_logreg-baseline/) | TF-IDF + Logistic Regression baseline |
+| 06 | [`06_mmBERT-small`](./06_mmBERT-small/) | mmBERT-small experiments |
+| 07 | [`07_distilbert-base-german-cased`](./07_distilbert-base-german-cased/) | DistilBERT German experiments |
+| 08 | [`08_mmbert-base`](./08_mmbert-base/) | mmBERT-base experiments |
+| 09 | [`09_xlm-roberta-base`](./09_xlm-roberta-base/) | XLM-RoBERTa base experiments |
+| 10 | [`10_Gelectra-large`](./10_Gelectra-large/) | GeLECTRA-large experiments |
+| 11 | [`11_gpt`](./11_gpt/) | Luna 6 zero-shot baseline |
+| 12 | [`12_Learning-curve`](./12_Learning-curve/) | Learning-curve experiments |
+| 13 | [`13_model-comparison`](./13_model-comparison/) | Cross-model comparison |
+
+
+Each stage has its own README with methods, code, and outputs.
+
+
+
 ## At a glance
 
 - **30,629 texts** in the final three-class dataset
@@ -156,25 +179,6 @@ The repository reports more than accuracy: three-class confusion matrices, class
 - **Sanity check.** The Pangram test is small and excludes AI-assisted text.
 
 
-## Repository guide
-
-| Stage | Folder                            | Purpose                                      |
-| ----: | --------------------------------- | -------------------------------------------- |
-|    01 | `01_human-data`                   | Collect and clean German academic human text |
-|    02 | `02_ai-generated-data`            | Generate AI and AI-assisted counterparts     |
-|    03 | `03_pangram-test`                 | External Human-vs-AI sanity check            |
-|    04 | `04_hf-dataset`                   | Build the final Hugging Face dataset         |
-|    05 | `05_logreg-baseline`              | TF-IDF + Logistic Regression baseline        |
-|    06 | `06_mmBERT-small`                 | mmBERT-small experiments                     |
-|    07 | `07_distilbert-base-german-cased` | DistilBERT German experiments                |
-|    08 | `08_mmbert-base`                  | mmBERT-base experiments                      |
-|    09 | `09_xlm-roberta-base`             | XLM-RoBERTa base experiments                 |
-|    10 | `10_Gelectra-large`               | GeLECTRA-large experiments                   |
-|    11 | `11_gpt`                          | Luna 6 zero-shot baseline                    |
-|    12 | `12_Learning-curve`               | Learning-curve experiments                   |
-|    13 | `13_model-comparison`             | Cross-model comparison                       |
-
-Each stage has its own README with methods, code, and outputs.
 
 ## Reproduce
 
