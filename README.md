@@ -149,6 +149,36 @@ The six supervised models were evaluated on the held-out test set of 2,737 texts
 
 
 
+
+---
+
+## Error rate by text length
+
+The following table reports overall classification error across all three classes for different text-length bins.
+
+`n` denotes the number of held-out test samples in each bin.
+
+| Text length | n | TF-IDF + Logistic Regression | DistilBERT German | XLM-RoBERTa base | mmBERT-base | GeLECTRA-large |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| ≤70 | 399 | 23.06% | 16.79% | 17.04% | 10.53% | **9.27%** |
+| 71–150 | 293 | 8.19% | 9.90% | 8.87% | 3.41% | **2.73%** |
+| 151–300 | 640 | 7.03% | 7.81% | 8.28% | 3.12% | **2.34%** |
+| 301–500 | 342 | 5.26% | 6.14% | 5.56% | **0.58%** | 1.75% |
+| 501–750 | 653 | 5.82% | 7.50% | 6.43% | **1.53%** | 2.14% |
+| 750+ | 410 | 5.61% | 8.54% | 8.78% | 1.95% | **1.22%** |
+
+The clearest pattern is that **very short texts are substantially harder to classify**.
+
+
+## Confusion matrices
+
+Three-class confusion matrices for the TF-IDF baseline and GeLECTRA-large, the model with the highest held-out test accuracy, are shown below.
+
+| TF-IDF + Logistic Regression | GeLECTRA-large |
+| :---: | :---: |
+| ![TF-IDF three-class confusion matrix](05_logreg-baseline/results/tfidf-logreg-confmat-3class.svg) | ![GeLECTRA-large three-class confusion matrix](10_Gelectra-large/results/gelectra-large-confmat-3class.svg) |
+
+
 ### External sanity check (Pangram)
 
 A random sample of 50 human and 50 AI-generated texts, from about 35 to 1,143 words and covering all four generators, was checked with Pangram. All 100 were classified correctly. The sample is small and AI-assisted texts were not included, so this is a sanity check on the data and not a benchmark.
