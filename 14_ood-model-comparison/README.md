@@ -112,13 +112,9 @@ The notebook contains the complete OOD evaluation and automatically generates th
 
 ## Files
 
-```text
 14_ood-model-comparison/
 ├── 2-class-matrices/
 ├── 3-class-matrices/
-├── 20-sample-model-probabilities.csv
-├── 20-sample-prediction-comparison.csv
-├── model-agreement-matrix.csv
-├── model-comparison.csv
+├── tables/
+├── README.md
 └── ood_model_comparison.ipynb
-```
