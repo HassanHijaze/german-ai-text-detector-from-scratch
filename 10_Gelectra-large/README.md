@@ -22,8 +22,7 @@ binary Human-vs-AI evaluation
 
 Evaluation on the held-out test set of **2,737 texts**:
 
-| Accuracy | Macro-F1 | Human error | AI-generated error | AI-assisted 
-error |
+| Accuracy | Macro-F1 | Human error | AI-generated error | AI-assisted error |
 |---:|---:|---:|---:|---:|
 | **96.89%** | **96.91%** | 4.70% | 1.54% | 3.07% |
 
