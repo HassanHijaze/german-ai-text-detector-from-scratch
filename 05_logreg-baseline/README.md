@@ -41,6 +41,18 @@ Evaluation on the held-out test set of **2,737 texts**:
 
 AI-assisted text is the most difficult class for the baseline.
 
+
+### Class-specific errors
+
+| Class | Error rate |
+|---|---:|
+| Human | 8.53% |
+| AI-generated | 3.40% |
+| AI-assisted | 14.38% |
+
+The baseline performs best on fully AI-generated text, while **AI-assisted text is the most difficult class**, with an error rate of **14.38%**.
+
+
 ### Length analysis
 
 Performance depends strongly on text length.
