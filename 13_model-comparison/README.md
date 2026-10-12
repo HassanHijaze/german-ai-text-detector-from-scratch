@@ -12,31 +12,20 @@ The comparison includes:
 - GeLECTRA-large
 - mmBERT-base
 - mmBERT-small
-- XLM-RoBERTa-base
-
 ## Learning-curve comparison
 
-Validation accuracy is compared using the same training-data fractions for 
-all models:
+Validation accuracy is compared using the same training-data fractions for all models:
 
 | Model | 1% | 5% | 12% | 17.5% | 25% | 50% | 100% |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| DistilBERT German | 46.42% | 69.10% | 75.05% | 78.87% | 82.35% | 87.82% 
-| 90.50% |
-| GeLECTRA-large | 69.34% | 83.34% | 90.09% | 93.74% | 93.67% | 93.98% | 
-95.84% |
-| TF-IDF + Logistic Regression | 76.29% | 84.21% | 87.20% | 88.16% | 
-89.90% | 90.33% | 91.33% |
-| XLM-RoBERTa-base | 51.72% | 60.91% | 78.49% | 81.11% | 84.62% | 88.58% | 
-91.60% |
-| mmBERT-base | 65.97% | 87.20% | 91.43% | 93.43% | 94.22% | 95.11% | 
-**96.25%** |
-| mmBERT-small | 37.54% | 86.55% | 90.95% | 91.95% | 92.57% | 94.53% | 
-94.84% |
+| DistilBERT German | 46.42% | 69.10% | 75.05% | 78.87% | 82.35% | 87.82% | 90.50% |
+| GeLECTRA-large | 69.34% | 83.34% | 90.09% | 93.74% | 93.67% | 93.98% | 95.84% |
+| TF-IDF + Logistic Regression | 76.29% | 84.21% | 87.20% | 88.16% | 89.90% | 90.33% | 91.33% |
+| XLM-RoBERTa-base | 51.72% | 60.91% | 78.49% | 81.11% | 84.62% | 88.58% | 91.60% |
+| mmBERT-base | 65.97% | 87.20% | 91.43% | 93.43% | 94.22% | 95.11% | **96.25%** |
+| mmBERT-small | 37.54% | 86.55% | 90.95% | 91.95% | 92.57% | 94.53% | 94.84% |
 
-The classical TF-IDF baseline performs particularly well with very little 
-training data, reaching **76.29% validation accuracy with only 1% of the 
-training set**.
+The classical TF-IDF baseline performs particularly well with very little training data, reaching **76.29% validation accuracy with only 1% of the training set**.
 
 The transformer models benefit more strongly from additional data. At 100% 
 training data, **mmBERT-base achieves the highest validation accuracy at 
