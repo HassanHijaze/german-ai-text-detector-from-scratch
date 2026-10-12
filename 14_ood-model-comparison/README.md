@@ -76,7 +76,7 @@ Six models are evaluated:
 | XLM-RoBERTa-base | 91.83% | 0.9192 | 91.36% |
 | DistilBERT | 89.41% | 0.8953 | 90.33% |
 | mmBERT-small | 81.13% | 0.8021 | 74.44% |
-| TF-IDF + Logistic Regression | 79.40% | 0.7921 | — |
+| TF-IDF + Logistic Regression | 79.40% | 0.7921 | 96.89% |
 
 `mmBERT-base` achieved the strongest overall OOD performance, closely followed by `GeLECTRA-large`.
 
@@ -112,9 +112,11 @@ The notebook contains the complete OOD evaluation and automatically generates th
 
 ## Files
 
+```text
 14_ood-model-comparison/
 ├── 2-class-matrices/
 ├── 3-class-matrices/
 ├── tables/
 ├── README.md
 └── ood_model_comparison.ipynb
+```
