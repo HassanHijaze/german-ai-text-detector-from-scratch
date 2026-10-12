@@ -21,10 +21,10 @@ binary Human-vs-AI evaluation
 
 Evaluation on the held-out test set of **2,737 texts**:
 
-| Accuracy | Macro-F1 | Human error | AI-generated error | AI-assisted 
-error |
+| Accuracy | Macro-F1 | Human error | AI-generated error | AI-assisted error |
 |---:|---:|---:|---:|---:|
 | **90.83%** | **90.82%** | 19.91% | 2.08% | 5.49% |
+
 
 ### Class-specific errors
 
@@ -66,11 +66,6 @@ difficult.
 | 501–750 | 653 | 92.50% |
 | 750+ | 410 | 91.46% |
 
-Accuracy increases considerably from **83.21%** for texts of 70 words or 
-fewer to above **90%** for all longer text groups.
-
-The strongest performance is observed for texts between **301 and 500 
-words**, with an accuracy of **93.86%**.
 
 ## Files
 
