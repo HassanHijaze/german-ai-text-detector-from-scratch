@@ -64,7 +64,8 @@ For most human samples, an AI-generated and an AI-assisted counterpart were crea
 
 - **AI-assisted:** the model receives the human text and rewrites or polishes it while preserving meaning, argument, order of ideas, citations, and numbers.
 - **AI-generated:** the model writes a new academic text on the same topic with its own wording and structure.
-- **DeepSeek exception:** the first DeepSeek setup paraphrased the human source too closely. For DeepSeek, the final AI-generated strategy first extracts three short topics from the human text and then generates a new text from those topics only.
+
+
 
 | Generator         | AI-generated | AI-assisted |
 | ----------------- | -----------: | ----------: |
@@ -196,11 +197,13 @@ A random sample of 50 human and 50 AI-generated texts, from about 35 to 1,143 wo
 
 6. **The baseline struggles most with AI-assisted text.** Its AI-assisted error rate is 14.38%, while the fine-tuned transformer models reduce this to between 3.07% and 5.49%.
 
-7. **Generation method matters.** The Pangram check exposed that the original DeepSeek setup produced near-paraphrases of the Human source, which led to the topics-only strategy.
 
-8. **Validation and held-out test results are broadly consistent.** The strongest models remain near the top across both evaluations, although the exact ordering changes slightly.
+7. **Validation and held-out test results are broadly consistent.** The strongest models remain near the top across both evaluations, although the exact ordering changes slightly.
 
-9. **Text length matters.** Across all supervised models, texts of 70 words or fewer are the most difficult length group.
+8. **Text length matters.** Across all supervised models, texts of 70 words or fewer are the most difficult length group.
+
+9. **OOD evaluation changes the picture.** mmBERT-base (96.55%) and GeLECTRA-large (96.32%) remain highly robust on texts from new domains, whereas some models lose substantially more performance. Most notably, mmBERT-small falls from 95.94% held-out accuracy to 81.13% OOD accuracy, highlighting the importance of evaluating generalization beyond the original data distribution.
+
 
 ## Evaluation
 
