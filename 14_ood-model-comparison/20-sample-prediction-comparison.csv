@@ -1,0 +1,21 @@
+File,Actual,DistilBERT,GeLECTRA,mmBERT-base,mmBERT-small,XLM-R,Models Wrong
+162.txt,Human,AI-assisted,Human,Human,AI-assisted,Human,2
+221.txt,Human,Human,AI-assisted,Human,AI-assisted,Human,2
+047.txt,Human,Human,Human,Human,Human,Human,0
+132.txt,Human,Human,Human,Human,Human,Human,0
+241.txt,Human,Human,Human,Human,Human,Human,0
+211.txt,Human,Human,Human,Human,AI-assisted,Human,1
+031.txt,Human,Human,Human,Human,Human,Human,0
+005.txt,AI,AI,AI,AI,AI,AI,0
+027.txt,AI,AI,AI,AI,AI,AI,0
+122.txt,AI,AI-assisted,AI,AI,AI,AI,1
+175.txt,AI,AI,AI,AI,AI,AI,0
+015.txt,AI,AI,AI,AI,AI,AI,0
+182.txt,AI,AI,AI,AI,AI,AI,0
+213.txt,AI,AI,AI,AI,AI,AI,0
+011.txt,AI-assisted,AI-assisted,AI-assisted,AI-assisted,AI-assisted,AI-assisted,0
+200.txt,AI-assisted,AI-assisted,AI-assisted,AI-assisted,AI-assisted,AI-assisted,0
+286.txt,AI-assisted,AI-assisted,AI-assisted,AI-assisted,AI-assisted,AI-assisted,0
+120.txt,AI-assisted,AI-assisted,AI-assisted,AI-assisted,AI-assisted,AI-assisted,0
+196.txt,AI-assisted,AI-assisted,AI-assisted,AI-assisted,AI-assisted,AI-assisted,0
+240.txt,AI-assisted,AI-assisted,AI-assisted,AI-assisted,AI-assisted,AI-assisted,0
