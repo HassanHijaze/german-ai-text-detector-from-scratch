@@ -1,8 +1,8 @@
-# mmBERT-small
+[← 05 · TF-IDF + Logistic Regression](../05_logreg-baseline/)
 
-Fine-tuning 
-[`jhu-clsp/mmBERT-small`](https://huggingface.co/jhu-clsp/mmBERT-small) 
-for three-class German AI-text detection.
+# 06 · mmBERT-small
+
+Fine-tuning [`jhu-clsp/mmBERT-small`](https://huggingface.co/jhu-clsp/mmBERT-small) for three-class German AI-text detection.
 
 The classifier distinguishes between:
 
@@ -10,7 +10,20 @@ The classifier distinguishes between:
 - AI-generated text
 - AI-assisted text
 
-## Results
+## Setup
+
+A fine-tuned transformer classifier based on `jhu-clsp/mmBERT-small`.
+
+- Task: three-class sequence classification
+- Classes: Human, AI-generated, AI-assisted
+- Maximum sequence length: 512 tokens
+- Evaluation: train, validation, and held-out test splits
+- Calibration metrics: Brier score and log loss
+- Additional analyses: class-specific errors, text-length performance, binary Human-vs-AI evaluation, and learning curve
+
+## Test results
+
+Evaluation on the held-out test set of **2,737 texts**.
 
 The final model reached **95.94% test accuracy** and **95.70% validation accuracy**.
 
@@ -20,8 +33,19 @@ The final model reached **95.94% test accuracy** and **95.70% validation accurac
 | Validation | 95.70% | 0.0701 | 0.1435 |
 | Test | 95.94% | 0.0660 | 0.1369 |
 
+### Class-specific errors
 
-The test confusion matrix was:
+| Class | Error rate |
+|---|---:|
+| Human | 6.24% |
+| AI-generated | 0.99% |
+| AI-assisted | 4.94% |
+
+The model is particularly reliable at identifying fully AI-generated text, with only **9 of 912 AI samples** misclassified.
+
+Most remaining errors occur between **Human** and **AI-assisted** text.
+
+The test confusion matrix is:
 
 ```text
 [[857   0  57]
@@ -29,19 +53,9 @@ The test confusion matrix was:
  [ 40   5 866]]
 ```
 
-This corresponds to the following class-specific error rates:
-
-| Class | Error rate |
-|---|---:|
-| Human | 6.24% |
-| AI | 0.99% |
-| AI-assisted | 4.94% |
-
-The model is especially strong at recognizing fully AI-generated text, with only **9 of 912 AI samples** misclassified. The largest remaining source of error is the distinction between Human and AI-assisted text.
-
 ## Length analysis
 
-Performance improves noticeably with text length. Very short texts remain the most difficult cases, while longer samples are classified more reliably.
+Performance varies with text length, with very short texts remaining the most difficult samples.
 
 The analysis uses the following word-count bins:
 
@@ -52,7 +66,7 @@ The analysis uses the following word-count bins:
 - 501–750
 - 750+
 
-The corresponding length-bias results are stored in:
+The full length-based evaluation is stored in:
 
 ```text
 results/mmbert-small-length-bias-3class.csv
@@ -70,26 +84,30 @@ Increasing the amount of training data consistently improves validation performa
 | 25% | 6,246 | 99.87% | 93.84% |
 | 50% | 12,493 | 99.29% | 95.32% |
 
-The learning-curve results show that mmBERT-small benefits substantially from additional training data, particularly at smaller dataset sizes. Performance gains become more gradual once a larger fraction of the training set is used.
+The largest gains occur at smaller training-set sizes, while improvements become more gradual as additional data is added.
 
-## Artifacts
+## Files
 
-The trained model, tokenizer, and detector configuration are stored in:
+- model notebook: training, calibration, evaluation, confusion matrices, and length analysis
+- `artifacts/mmbert-small-3class/`: trained model, tokenizer, model configuration, and detector metadata
+- `results/mmbert-small-confmat-3class.svg`: three-class confusion matrix
+- `results/mmbert-small-confmat-human-ai.svg`: Human-vs-AI confusion matrix
+- `results/mmbert-small-length-bias-3class.csv`: text-length analysis
 
-```text
-artifacts/mmbert-small-3class/
+## Run
+
+This stage requires the dataset prepared in [04 · HF dataset](../04_hf-dataset/).
+
+Install the project dependencies from the repository root:
+
+```bash
+pip install -r requirements.txt
 ```
 
-The artifact directory contains the files required for later inference, including the trained model weights, tokenizer, model configuration, and detector metadata.
+Then run all cells of the mmBERT-small notebook.
 
-## Result files
+<div align="center">
 
-The main evaluation outputs include:
+[← 05 · TF-IDF + Logistic Regression](../05_logreg-baseline/) · [Project index](../README.md) · [07 · DistilBERT →](../07_distilbert-base-german-cased/)
 
-```text
-results/mmbert-small-confmat-3class.svg
-results/mmbert-small-confmat-human-ai.svg
-results/mmbert-small-length-bias-3class.csv
-```
-
-The three-class confusion matrix summarizes performance across Human, AI, and AI-assisted samples, while the Human-vs-AI matrix provides an additional binary evaluation focused on distinguishing Human from AI-generated text.
+</div>
