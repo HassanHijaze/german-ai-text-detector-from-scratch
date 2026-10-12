@@ -217,7 +217,7 @@ The repository reports more than accuracy: three-class confusion matrices, class
 
 
 
-## Reproduce
+## Reproduction
 
 Install the required packages:
 
@@ -225,7 +225,7 @@ Install the required packages:
 pip install -r requirements.txt
 ```
 
-## Reproduction guide
+
 
 The repository is organized as a numbered workflow, from data collection and AI-text generation through dataset construction, model training, learning curves, and final model comparison.
 
