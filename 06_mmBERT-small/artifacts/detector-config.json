@@ -8,9 +8,9 @@
   },
   "max_length": 512,
   "calibration": "temperature scaling",
-  "temperature": 2.7918285368806615,
+  "temperature": 4.130494049144824,
   "best_validation_accuracy": 0.9569855471438403,
-  "best_checkpoint": "checkpoints-mmbert-small/checkpoint-6248",
+  "best_checkpoint": "checkpoints-mmbert-small/checkpoint-9372",
   "random_state": 17,
   "python_version": "3.13.15",
   "package_versions": {

@@ -12,48 +12,55 @@ The classifier distinguishes between:
 
 ## Results
 
-The final model reached **95.98% test accuracy** and **95.63% validation 
-accuracy**.
+The final model reached **95.94% test accuracy** and **95.70% validation accuracy**.
 
 | Split | Accuracy | Brier score | Log loss |
 |---|---:|---:|---:|
-| Train | 99.83% | 0.0060 | 0.0336 |
-| Validation | 95.63% | 0.0714 | 0.1464 |
-| Test | 95.98% | 0.0689 | 0.1397 |
+| Train | 99.89% | 0.0062 | 0.0331 |
+| Validation | 95.70% | 0.0701 | 0.1435 |
+| Test | 95.94% | 0.0660 | 0.1369 |
 
-Temperature scaling improved validation calibration:
 
-| Model | Brier score | Log loss |
-|---|---:|---:|
-| Uncalibrated | 0.0825 | 0.3858 |
-| Temperature-scaled | 0.0714 | 0.1464 |
+The test confusion matrix was:
 
-The learned calibration temperature was **3.9188**.
+```text
+[[857   0  57]
+ [  0 903   9]
+ [ 40   5 866]]
+```
 
-## Error profile
+This corresponds to the following class-specific error rates:
 
-On the three-class test set, most errors occur between **Human** and 
-**AI-assisted** text, while fully AI-generated samples are classified 
-particularly reliably.
+| Class | Error rate |
+|---|---:|
+| Human | 6.24% |
+| AI | 0.99% |
+| AI-assisted | 4.94% |
 
-The additional binary Human-vs-AI evaluation produced:
-
-- **911** true positives
-- **909** true negatives
-- **5** false positives
-- **1** false negative
+The model is especially strong at recognizing fully AI-generated text, with only **9 of 912 AI samples** misclassified. The largest remaining source of error is the distinction between Human and AI-assisted text.
 
 ## Length analysis
 
-Performance improves noticeably with text length. Accuracy rises from 
-about **85.2% for texts up to 70 words** to around **98% for samples above 
-300 words**, indicating that very short texts remain the most difficult 
-cases.
+Performance improves noticeably with text length. Very short texts remain the most difficult cases, while longer samples are classified more reliably.
+
+The analysis uses the following word-count bins:
+
+- ≤70
+- 71–150
+- 151–300
+- 301–500
+- 501–750
+- 750+
+
+The corresponding length-bias results are stored in:
+
+```text
+results/mmbert-small-length-bias-3class.csv
+```
 
 ## Learning curve
 
-Increasing the amount of training data consistently improves validation 
-performance.
+Increasing the amount of training data consistently improves validation performance.
 
 | Training fraction | Samples | Train accuracy | Validation accuracy |
 |---:|---:|---:|---:|
@@ -63,9 +70,26 @@ performance.
 | 25% | 6,246 | 99.87% | 93.84% |
 | 50% | 12,493 | 99.29% | 95.32% |
 
+The learning-curve results show that mmBERT-small benefits substantially from additional training data, particularly at smaller dataset sizes. Performance gains become more gradual once a larger fraction of the training set is used.
+
 ## Artifacts
 
 The trained model, tokenizer, and detector configuration are stored in:
 
 ```text
 artifacts/mmbert-small-3class/
+```
+
+The artifact directory contains the files required for later inference, including the trained model weights, tokenizer, model configuration, and detector metadata.
+
+## Result files
+
+The main evaluation outputs include:
+
+```text
+results/mmbert-small-confmat-3class.svg
+results/mmbert-small-confmat-human-ai.svg
+results/mmbert-small-length-bias-3class.csv
+```
+
+The three-class confusion matrix summarizes performance across Human, AI, and AI-assisted samples, while the Human-vs-AI matrix provides an additional binary evaluation focused on distinguishing Human from AI-generated text.
