@@ -2,19 +2,14 @@
 
 # 05 · TF-IDF + Logistic Regression
 
-A classical **TF-IDF + Logistic Regression** baseline for the three-class 
-classification task: **Human**, **AI-generated**, and **AI-assisted** 
-text.
+A classical **TF-IDF + Logistic Regression** baseline for the three-class classification task: **Human**, **AI-generated**, and **AI-assisted** text.
 
 ## Setup
 
-The baseline uses a scikit-learn pipeline consisting of a TF-IDF 
-vectorizer followed by Logistic Regression.
+The baseline uses a scikit-learn pipeline consisting of a TF-IDF vectorizer followed by Logistic Regression.
 
-- TF-IDF: lowercase text, `max_df=0.98`, up to 200,000 features, sublinear 
-term frequency
-- Logistic Regression: `lbfgs` solver, maximum 1,000 iterations, random 
-seed 17
+- TF-IDF: lowercase text, `max_df=0.98`, up to 200,000 features, sublinear term frequency
+- Logistic Regression: `lbfgs` solver, maximum 1,000 iterations, random seed 17
 - Hyperparameter search:
   - `min_df` ∈ {2, 5}
   - `ngram_range` ∈ {(1,1), (1,2)}
@@ -32,9 +27,7 @@ min_df = 5
 ngram_range = (1, 1)
 ```
 
-Because `C = 3.0` is the largest value included in the search grid, a 
-wider hyperparameter search could potentially improve the baseline 
-slightly.
+Because `C = 3.0` is the largest value included in the search grid, a wider hyperparameter search could potentially improve the baseline slightly.
 
 No GPU is required.
 
@@ -48,26 +41,36 @@ Evaluation on the held-out test set of **2,737 texts**:
 
 AI-assisted text is the most difficult class for the baseline.
 
-Performance is also strongly affected by text length. The pooled error 
-rate is highest for texts of **70 words or fewer (23.06%)** and remains 
-between **5.26% and 7.03%** for texts longer than 150 words.
+### Length analysis
 
-Confusion matrices, length-based evaluation, and comparisons with the 
-transformer models are available in the [main README](../README.md).
+Performance depends strongly on text length.
+
+| Length | Samples | Accuracy |
+|---|---:|---:|
+| ≤70 | 399 | 76.94% |
+| 71–150 | 293 | 91.81% |
+| 151–300 | 640 | 92.97% |
+| 301–500 | 342 | 94.74% |
+| 501–750 | 653 | 94.18% |
+| 750+ | 410 | 94.39% |
+
 
 ## Files
 
-- `Logestic_Regression.ipynb` — training, model selection, evaluation, and 
-text-length analysis
-- `artifacts/tfidf-logreg-3class.joblib` — fitted TF-IDF + Logistic 
-Regression pipeline
-- `artifacts/tfidf-logreg-3class.json` — model metadata
-- `results/` — confusion matrices and text-length analysis outputs
+```text
+05_logreg-baseline/
+├── artifacts/
+├── results/
+│   ├── tfidf-logreg-confmat-3class.svg
+│   ├── tfidf-logreg-confmat-human-ai.svg
+│   └── tfidf-logreg-length-bias-3class.csv
+├── Logestic_Regression.ipynb
+└── README.md
+```
 
 ## Run
 
-This stage requires the dataset prepared in [04 · HF 
-dataset](../04_hf-dataset/).
+This stage requires the dataset prepared in [04 · HF dataset](../04_hf-dataset/).
 
 Install the project dependencies from the repository root:
 
@@ -83,7 +86,6 @@ Logestic_Regression.ipynb
 
 <div align="center">
 
-[← 04 · HF dataset](../04_hf-dataset/) · [Project index](../README.md) · 
-[06 · mmBERT-small →](../06_mmBERT-small/)
+[← 04 · HF dataset](../04_hf-dataset/) · [Project index](../README.md) · [06 · mmBERT-small →](../06_mmBERT-small/)
 
 </div>
