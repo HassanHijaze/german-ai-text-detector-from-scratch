@@ -4,8 +4,7 @@
 
 A classical **TF-IDF + Logistic Regression** baseline for the three-class 
 classification task: **Human**, **AI-generated**, and **AI-assisted** 
-text. It serves as the non-neural reference point for the 
-transformer-based models evaluated in stages 06–10.
+text.
 
 ## Setup
 
@@ -43,8 +42,7 @@ No GPU is required.
 
 Evaluation on the held-out test set of **2,737 texts**:
 
-| Accuracy | Macro-F1 | Human error | AI-generated error | AI-assisted 
-error |
+| Accuracy | Macro-F1 | Human error | AI-generated error | AI-assisted error |
 |---:|---:|---:|---:|---:|
 | 91.23% | 91.22% | 8.53% | 3.40% | 14.38% |
 
