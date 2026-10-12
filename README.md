@@ -208,12 +208,14 @@ The repository reports more than accuracy: three-class confusion matrices, class
 
 ## Limitations
 
-- **Domain.** All texts are German academic writing. Results should not be assumed to transfer to other genres, registers, or languages.
-- **Generation prompts.** The AI texts were produced with prompts asking for polished academic German. Style and polish may therefore act as a signal in addition to authorship. A test on plainer or differently styled text from other generators is planned.
-- **Generators.** Four model families are covered, not every current or future model.
-- **AI-assisted class.** Real AI-assisted writing varies widely. This class represents one specific form of AI rewriting and polishing.
-- - **Short texts.** Texts of 70 words or fewer are substantially harder to classify.
-- **Sanity check.** The Pangram test is small and excludes AI-assisted text.
+- **Domain.** The dataset focuses on German academic writing, so performance may differ for other genres, writing styles, or languages.
+
+- **Generators.** The dataset includes four model families and therefore represents only a subset of currently available language models.
+
+- **AI-assisted class.** AI-assisted writing can take many different forms. In this project, the class represents a specific type of rewriting and polishing of Human text.
+
+- **Short texts.** Performance is lower for texts of 70 words or fewer, where less linguistic evidence is available.
+
 
 
 
