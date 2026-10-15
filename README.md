@@ -21,14 +21,16 @@ Unlike conventional binary Human-vs-AI detectors, this project treats **AI-assis
 | 02 | [`02_ai-generated-data`](./02_ai-generated-data/) | Generate AI-generated and AI-assisted texts |
 | 03 | [`03_pangram-test`](./03_pangram-test/) | External Human-vs-AI sanity check |
 | 04 | [`04_hf-dataset`](./04_hf-dataset/) | Build the final Hugging Face dataset |
-| 05 | [`05_logreg-baseline`](./05_logreg-baseline/) | TF-IDF + Logistic Regression baseline |
-| 06 | [`06_luna6-baseline`](./06_luna6-baseline/) | Luna 6 zero-shot baseline |
-| 07 | [`07_fine-tuning`](./07_fine-tuning/) | Fine-tune and evaluate Transformer classifiers |
-| 08 | [`08_learning-curves`](./08_learning-curves/) | Learning-curve experiments |
-| 09 | [`09_model-comparison`](./09_model-comparison/) | Compare all trained models |
-| 10 | [`10_ood-model-comparison`](./10_ood-model-comparison/) | Out-of-distribution evaluation |
-
-
+| 05 | [`05_luna-6-baseline`](./05_luna-6-baseline/) | Evaluate Luna 6 as a zero-shot LLM baseline |
+| 06 | [`06_logreg-baseline`](./06_logreg-baseline/) | Train and evaluate the TF-IDF + Logistic Regression baseline |
+| 07 | [`07_mmbert-small`](./07_mmbert-small/) | Fine-tune and evaluate mmBERT-small |
+| 08 | [`08_distilbert-german`](./08_distilbert-german/) | Fine-tune and evaluate DistilBERT German |
+| 09 | [`09_mmbert-base`](./09_mmbert-base/) | Fine-tune and evaluate mmBERT-base |
+| 10 | [`10_xlm-roberta-base`](./10_xlm-roberta-base/) | Fine-tune and evaluate XLM-RoBERTa base |
+| 11 | [`11_gelectra-large`](./11_gelectra-large/) | Fine-tune and evaluate GeLECTRA-large |
+| 12 | [`12_learning-curves`](./12_learning-curves/) | Analyze model performance across different training-set sizes |
+| 13 | [`13_model-comparison`](./13_model-comparison/) | Compare all supervised models on the held-out test set |
+| 14 | [`14_ood-model-comparison`](./14_ood-model-comparison/) | Evaluate model generalization on out-of-distribution data |
 
 ## Dataset
 
