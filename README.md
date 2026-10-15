@@ -1,12 +1,26 @@
 # German AI Text Detector
 
-A three-class research project for distinguishing **human-written**, **AI-generated**, and **AI-assisted** German academic text.
+A three-class machine learning project for distinguishing **human-written**, **AI-generated**, and **AI-assisted** German text.
 
-The repository covers the full pipeline: data collection, AI-text generation, dataset construction, model training, error analysis, learning curves, and cross-model comparison.
+The project covers the complete pipeline from data collection and AI-text generation to dataset construction, model training, learning curves, error analysis, and out-of-distribution evaluation.
 
-Unlike a binary Human-vs-AI detector, this project treats **AI-assisted writing** (human text rewritten or polished by a language model) as a separate class.
+Unlike conventional binary Human-vs-AI detectors, this project treats **AI-assisted writing** — human text rewritten or polished by a language model — as a separate class.
 
-> **Status:** the dataset pipeline, six supervised models with held-out test results, a zero-shot LLM baseline, length-bias analysis, and learning curves are complete.
+> **Top held-out result:** GeLECTRA-large reaches **96.89% accuracy** and **96.91% Macro-F1**, closely followed by mmBERT-base at **96.64% accuracy**.  
+> **Top OOD results:** mmBERT-base reaches **96.55% accuracy**, closely followed by GeLECTRA-large at **96.32%**, on 869 texts from previously unseen source domains.
+
+## At a glance
+
+- **30,629 texts** across three classes
+- **10,227 human texts** from **4,121 academic source documents**
+- AI-generated and AI-assisted texts from **four LLM families**
+- Document-level train / validation / test splitting to reduce source leakage
+- **6 supervised classifiers** and **1 zero-shot LLM baseline**
+- Best held-out test accuracy: **96.89% — GeLECTRA-large**
+- Best OOD accuracy: **96.55% — mmBERT-base**
+- Evaluation includes **Macro-F1, confusion matrices, class-specific errors, text-length analysis, learning curves, calibration, and OOD generalization**
+
+
 
 
 ## Repository guide
@@ -23,24 +37,12 @@ Unlike a binary Human-vs-AI detector, this project treats **AI-assisted writing*
 | 08 | [`08_mmbert-base`](./08_mmbert-base/) | mmBERT-base experiments |
 | 09 | [`09_xlm-roberta-base`](./09_xlm-roberta-base/) | XLM-RoBERTa-base experiments |
 | 10 | [`10_Gelectra-large`](./10_Gelectra-large/) | GeLECTRA-large experiments |
-| 11 | [`11_luna6-baseline`](./11_luna6-baseline/) | Luna6 zero-shot baseline |
+| 11 | [`11_luna-6-baseline`](./11_luna-6-baseline/) | Luna-6 zero-shot baseline |
 | 12 | [`12_learning-curves`](./12_learning-curves/) | Learning-curve experiments |
 | 13 | [`13_model-comparison`](./13_model-comparison/) | Cross-model comparison |
 | 14 | [`14_ood-model-comparison`](./14_ood-model-comparison/) | Out-of-distribution model comparison |
 
 
-Each stage has its own README with methods, code, and outputs.
-
-
-
-## At a glance
-
-- **30,629 texts** in the final three-class dataset
-- **10,227 human texts** from **4,121 source documents** (SSOAR, peDOCS, Refubium)
-- AI and AI-assisted texts from **four generator families**
-- Document-level train / validation / test splits
-- **Six supervised classifiers** and **one zero-shot LLM baseline**
-- Evaluation with confusion matrices, class-specific results, length analysis, and learning curves
 
 ## Dataset
 
@@ -54,9 +56,6 @@ Each stage has its own README with methods, code, and outputs.
 
 Only openly licensed material was kept (CC BY, CC BY-SA, CC0, Public Domain). The texts come from German academic documents published before the widespread use of generative AI. Source and license information is stored per sample.
 
-### Text construction
-
-Documents were cut into **sentence-complete chunks** with target lengths of about 50, 150, 300, 600, and 1,000 words. At most **three chunks per document** were used, and all chunks of one document stay in the same split.
 
 ### AI-generated and AI-assisted texts
 
@@ -64,6 +63,8 @@ For most human samples, an AI-generated and an AI-assisted counterpart were crea
 
 - **AI-assisted:** the model receives the human text and rewrites or polishes it while preserving meaning, argument, order of ideas, citations, and numbers.
 - **AI-generated:** the model writes a new academic text on the same topic with its own wording and structure.
+
+
 
 
 
@@ -89,11 +90,29 @@ For most human samples, an AI-generated and an AI-assisted counterpart were crea
 | Validation |   971 |   967 |         968 |  2,906 |
 | Test       |   914 |   912 |         911 |  2,737 |
 
-Related texts (the same source document and everything derived from it) always stay in the same split, which reduces source leakage.
+
+### Out-of-distribution evaluation
+
+To evaluate generalization beyond the academic training distribution, all six supervised models were tested on a separate dataset of **869 texts**:
+
+- **290 Human**
+- **289 AI-generated**
+- **290 AI-assisted**
+
+The human texts come from previously unseen domains:
+
+- German Wikipedia — encyclopedic text
+- German Wikinews — news
+- German Wikivoyage — travel
+- German Wikibooks — instructional text
+
+The same four LLM families used in the main dataset were used to create the corresponding AI-generated and AI-assisted samples.
+
+
 
 ## Models
 
-Five supervised classifiers were trained or fine-tuned on the same three-class dataset. In addition, Luna 6 was evaluated as a zero-shot LLM baseline without task-specific training.
+Six supervised classifiers were trained or fine-tuned on the same three-class dataset. In addition, Luna-6 was evaluated as a zero-shot LLM baseline without task-specific training.
 
 | Model | Type | Parameters |
 |---|---|---:|
@@ -103,11 +122,25 @@ Five supervised classifiers were trained or fine-tuned on the same three-class d
 | [XLM-RoBERTa base](https://huggingface.co/FacebookAI/xlm-roberta-base) | Transformer | ~278M |
 | [mmBERT-base](https://huggingface.co/jhu-clsp/mmBERT-base) | Transformer | 307M |
 | [GeLECTRA-large](https://huggingface.co/deepset/gelectra-large) | Transformer | ~335M |
+| Luna 6 (Azure OpenAI) | Zero-shot LLM baseline | Not publicly disclosed |
 
 
-\* The Logistic Regression parameter count depends on the fitted TF-IDF vocabulary. With at most 200,000 features and three output classes, the classifier has at most approximately 600,000 learned coefficients; this is not directly comparable to neural-network parameter counts.
 
 ## Results
+
+### Main model comparison
+
+The supervised models were evaluated on the held-out academic test set and on a separate out-of-distribution (OOD) dataset containing 869 texts from previously unseen source domains.
+
+| Model | Test Accuracy | OOD Accuracy | OOD Human vs AI Accuracy |
+|---|---:|---:|---:|
+| **mmBERT-base** | 96.64% | **96.55%** | **98.27%** |
+| **GeLECTRA-large** | **96.89%** | 96.32% | 96.37% |
+| XLM-RoBERTa base | 91.09% | 91.83% | 91.36% |
+| DistilBERT German | 90.83% | 89.41% | 90.33% |
+| mmBERT-small | 95.94% | 81.13% | 74.44% |
+| TF-IDF + Logistic Regression | 91.23% | 79.40% | 96.89% |
+
 
 ### Learning curves
 
@@ -122,11 +155,10 @@ Each supervised model was trained on 1%, 5%, 12%, 17.5%, 25%, 50%, and 100% of t
 | TF-IDF + Logistic Regression |              91.33% |
 | DistilBERT German            |              90.50% |
 
-These are **validation** results from the learning-curve experiments, not final held-out test results.
 
 ### Final results
 
-The six supervised models were evaluated on the held-out test set of 2,737 texts (914 Human, 912 AI-generated, 911 AI-assisted). Luna6 was evaluated separately on a balanced sample of approximately 9,000 texts. "Human flagged as AI or AI-assisted" is the share of human texts predicted as anything other than Human.
+The six supervised models were evaluated on the held-out test set of 2,737 texts (914 Human, 912 AI-generated, 911 AI-assisted). Luna-6 was evaluated separately on a balanced sample of approximately 9,000 texts. "Human flagged as AI or AI-assisted" is the share of human texts predicted as anything other than Human.
 
 | Model | Accuracy | Macro-F1 | Human flagged as AI or AI-assisted |
 |---|---:|---:|---:|
@@ -136,9 +168,9 @@ The six supervised models were evaluated on the held-out test set of 2,737 texts
 | TF-IDF + Logistic Regression | 91.23% | 91.22% | 8.53% |
 | XLM-RoBERTa base | 91.09% | 91.03% | 21.66% |
 | DistilBERT German | 90.83% | 90.82% | 19.91% |
-| Luna6 zero-shot* | 57.03% | 54.96% | 4.78% |
+| Luna-6 zero-shot* | 57.03% | 54.96% | 4.78% |
 
-\* Luna6 was not fine-tuned and was evaluated on a separate balanced sample of approximately 9,000 texts, so its result is shown as a reference rather than a directly comparable test score.
+
 
 ### Error rate per class
 
@@ -150,7 +182,7 @@ The six supervised models were evaluated on the held-out test set of 2,737 texts
 | TF-IDF + Logistic Regression | 8.53% | 3.40% | 14.38% |
 | XLM-RoBERTa base | 21.66% | 0.88% | 4.17% |
 | DistilBERT German | 19.91% | 2.08% | 5.49% |
-| Luna6 zero-shot* | 4.78% | 47.53% | 76.53% |
+| Luna-6 zero-shot* | 4.78% | 47.53% | 76.53% |
 
 
 ---
@@ -173,72 +205,54 @@ The following table reports overall classification error across all three classe
 The clearest pattern is that **very short texts are substantially harder to classify**.
 
 
-## Confusion matrices
-
-Three-class confusion matrices for the TF-IDF baseline and GeLECTRA-large, the model with the highest held-out test accuracy, are shown below.
-
-| TF-IDF + Logistic Regression | GeLECTRA-large |
-| :---: | :---: |
-| ![TF-IDF three-class confusion matrix](05_logreg-baseline/results/tfidf-logreg-confmat-3class.svg) | ![GeLECTRA-large three-class confusion matrix](10_Gelectra-large/results/gelectra-large-confmat-3class.svg) |
-
-
-### External sanity check (Pangram)
-
-A random sample of 50 human and 50 AI-generated texts, from about 35 to 1,143 words and covering all four generators, was checked with Pangram. All 100 were classified correctly. The sample is small and AI-assisted texts were not included, so this is a sanity check on the data and not a benchmark.
 
 ## Key findings
 
-1. **The top three models are close.** GeLECTRA-large (96.89%), mmBERT-base (96.64%), and mmBERT-small (95.94%) lead on the held-out test set. The gap between GeLECTRA-large and mmBERT-base is only 0.25 percentage points. On the learning-curve validation results, mmBERT-base was ahead at 96.25% versus 95.84% for GeLECTRA-large.
 
-2. **A small model is competitive.** mmBERT-small reaches 95.94% test accuracy and remains close to the two strongest larger transformer models while outperforming XLM-RoBERTa base, DistilBERT German, and the TF-IDF baseline.
+- **A zero-shot LLM is not enough.** Luna 6 reaches **57.03% accuracy** and **54.96% Macro-F1** without task-specific training, far below the supervised models, which achieve between **90.83% and 96.89% accuracy**.
 
-3. **Accuracy hides large differences in human error.** XLM-RoBERTa base and DistilBERT German reach about 91% accuracy but misclassify 21.66% and 19.91% of Human texts. The TF-IDF baseline has similar overall accuracy but a substantially lower Human error rate of 8.53%.
+- **A simple baseline goes surprisingly far.** TF-IDF + Logistic Regression reaches **91.23% test accuracy** without Transformer fine-tuning, showing that lexical patterns alone provide a strong baseline for this task.
 
-4. **Fine-tuning is important.** The zero-shot Luna6 baseline reaches 57.03% three-class accuracy. It identifies Human text reliably but has much higher error rates for AI-generated (47.53%) and AI-assisted (76.53%) text. Because Luna6 was evaluated on a separate sample and depends on the chosen prompt, it is treated as a reference baseline.
+- **Doing well on the test set isn't enough.** On the held-out academic test set, mmBERT-small (**95.94%**), mmBERT-base (**96.64%**) and GeLECTRA-large (**96.89%**) perform similarly. On texts from previously unseen source domains, mmBERT-base (**96.55%**) and GeLECTRA-large (**96.32%**) remain strong, while mmBERT-small drops to **81.13%**. OOD evaluation is what clearly separates their generalization performance.
 
-5. **Fully AI-generated text is generally the easiest class for the supervised models.** AI-generated error ranges from 0.88% to 3.40%. For all five fine-tuned transformer models, Human text has the highest class-specific error rate. For TF-IDF + Logistic Regression, AI-assisted text is the most difficult class.
+- **AI-assisted text is harder than fully AI-generated text.** Across the supervised models, AI-generated text has very low error rates of **0.88%–3.40%**, while AI-assisted text produces higher error rates of **3.07%–14.38%**.
 
-6. **The baseline struggles most with AI-assisted text.** Its AI-assisted error rate is 14.38%, while the fine-tuned transformer models reduce this to between 3.07% and 5.49%.
-
-
-7. **Validation and held-out test results are broadly consistent.** The strongest models remain near the top across both evaluations, although the exact ordering changes slightly.
-
-8. **Text length matters.** Across all supervised models, texts of 70 words or fewer are the most difficult length group.
-
-9. **OOD evaluation changes the picture.** mmBERT-base (96.55%) and GeLECTRA-large (96.32%) remain highly robust on texts from new domains, whereas some models lose substantially more performance. Most notably, mmBERT-small falls from 95.94% held-out accuracy to 81.13% OOD accuracy, highlighting the importance of evaluating generalization beyond the original data distribution.
-
-
-## Evaluation
-
+- **Short texts are substantially harder.** For texts of **70 words or fewer**, error rates range from **9.27% to 23.06%**, considerably higher than for longer texts.
 The repository reports more than accuracy: three-class confusion matrices, class-specific performance, prediction confidence, length-bias analysis, training vs. validation accuracy (generalization gap), learning curves, and the zero-shot LLM comparison.
 
 ## Limitations
 
-- **Domain.** The dataset focuses on German academic writing, so performance may differ for other genres, writing styles, or languages.
+- The models were trained primarily on **German academic texts**, mainly from the social sciences and education research, and on text generated by **four LLM families**. Performance may therefore differ for other domains, writing styles, languages, or newer AI models.
 
-- **Generators.** The dataset includes four model families and therefore represents only a subset of currently available language models.
+- **AI-assisted writing can take many forms.** In this project, it refers to a specific setting in which the complete human-written text is rewritten and polished by an AI model while preserving its content and structure.
 
-- **AI-assisted class.** AI-assisted writing can take many different forms. In this project, the class represents a specific type of rewriting and polishing of Human text.
+- Inputs are truncated to **512 tokens**, meaning that for longer texts only the beginning of the document is used for classification.
 
-- **Short texts.** Performance is lower for texts of 70 words or fewer, where less linguistic evidence is available.
-
-
+- The detector produces **probabilistic, not proof**. Its output should not be used on its own to accuse, penalize, grade, or otherwise make high-stakes decisions about individuals.
 
 
-## Reproduction
 
-Install the required packages:
+
+## Getting started
+
+Clone the repository and install the required dependencies:
 
 ```bash
+git clone https://github.com/HassanHijaze/german-ai-text-detector-from-scratch.git
+cd german-ai-text-detector-from-scratch
 pip install -r requirements.txt
+
 ```
 
 
+## Authors
 
-The repository is organized as a numbered workflow, from data collection and AI-text generation through dataset construction, model training, learning curves, and final model comparison.
+- [Hassan Hijazi](https://github.com/HassanHijaze)
+- [Ali Issa](https://github.com/aliissa824)
 
-For a full reproduction, run the stages in numerical order. Individual experiments can also be reproduced independently if the prepared Hugging Face dataset and the required model artifacts are already available.
 
-Rebuilding the complete pipeline requires considerably more compute and time than running a single notebook. Several stages depend on external language-model APIs, large-scale text generation, and GPU-based transformer training.
+## License
 
-For most users, the provided dataset, saved model artifacts, and result files offer the fastest way to inspect or reproduce the main experiments without rerunning the entire pipeline.
+The source code in this repository is released under the [MIT License](LICENSE).
+
+Datasets, source texts, pretrained models, and other third-party resources remain subject to their respective original licenses and terms of use.
