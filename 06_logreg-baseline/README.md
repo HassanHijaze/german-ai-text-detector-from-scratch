@@ -1,103 +1,89 @@
-[← 04 · HF dataset](../04_hf-dataset/)
+[← 05 · Luna 6 Zero-Shot Baseline](../05_luna-6-baseline/)
 
-# 05 · TF-IDF + Logistic Regression
+# 06 · TF-IDF + Logistic Regression Baseline
 
-A classical **TF-IDF + Logistic Regression** baseline for the three-class classification task: **Human**, **AI-generated**, and **AI-assisted** text.
+A classical machine-learning baseline for classifying German text as **Human**, **AI-generated**, or **AI-assisted**.
+
+The model represents each text using TF-IDF word and bigram features and applies Logistic Regression.
 
 ## Setup
 
-The baseline uses a scikit-learn pipeline consisting of a TF-IDF vectorizer followed by Logistic Regression.
+| Setting | Value |
+|---|---|
+| Training samples | 24,986 |
+| Validation samples | 2,906 |
+| Test samples | 2,737 |
+| Maximum features | 200,000 |
+| Cross-validation | 3-fold StratifiedGroupKFold |
+| Best `C` | 3.0 |
+| Best `min_df` | 5 |
+| Best `ngram_range` | `(1, 2)` |
 
-- TF-IDF: lowercase text, `max_df=0.98`, up to 200,000 features, sublinear term frequency
-- Logistic Regression: `lbfgs` solver, maximum 1,000 iterations, random seed 17
-- Hyperparameter search:
-  - `min_df` ∈ {2, 5}
-  - `ngram_range` ∈ {(1,1), (1,2)}
-  - `C` ∈ {0.3, 1.0, 3.0}
-- Model selection: `GridSearchCV`
-- Cross-validation: 3-fold `StratifiedGroupKFold`
-- Grouping: samples from the same source document remain in the same fold
-- Selection metric: accuracy
+## Results
 
-The selected configuration was:
-
-```text
-C = 3.0
-min_df = 5
-ngram_range = (1, 1)
-```
-
-Because `C = 3.0` is the largest value included in the search grid, a wider hyperparameter search could potentially improve the baseline slightly.
-
-No GPU is required.
-
-## Test results
-
-Evaluation on the held-out test set of **2,737 texts**:
-
-| Accuracy | Macro-F1 | Human error | AI-generated error | AI-assisted error |
-|---:|---:|---:|---:|---:|
-| 91.23% | 91.22% | 8.53% | 3.40% | 14.38% |
-
-AI-assisted text is the most difficult class for the baseline.
-
-
-### Class-specific errors
-
-| Class | Error rate |
+| Metric | Result |
 |---|---:|
-| Human | 8.53% |
-| AI-generated | 3.40% |
-| AI-assisted | 14.38% |
+| Validation accuracy | 91.47% |
+| Test accuracy | **91.23%** |
+| Test Macro-F1 | **91.22%** |
+| Human error | 8.53% |
+| AI-generated error | 3.40% |
+| AI-assisted error | 14.38% |
 
-The baseline performs best on fully AI-generated text, while **AI-assisted text is the most difficult class**, with an error rate of **14.38%**.
+![TF-IDF + Logistic Regression confusion matrix](./results/tfidf-logreg-confmat-3class.svg)
+
+The model performs best on **AI-generated text** and struggles most with **AI-assisted text**, especially when it is classified as Human.
+
+## Human vs AI-generated
+
+![TF-IDF + Logistic Regression Human vs AI-generated](./results/tfidf-logreg-confmat-human-ai.svg)
+
+For the binary Human-vs-AI-generated task, the model reaches **98.96% accuracy** on 1,826 samples.
+
+This shows that the main difficulty in the full three-class task is distinguishing **Human** from **AI-assisted** writing.
+
+## Text Length
+
+Short texts are clearly more difficult:
+
+| Words | Accuracy |
+|---|---:|
+| ≤70 | 76.94% |
+| 71–150 | 91.81% |
+| 151–300 | 92.97% |
+| 301–500 | **94.74%** |
+| 501–750 | 94.18% |
+| 750+ | 94.39% |
+
+From around 150 words onward, performance remains relatively stable at approximately **93–95%**.
+
+## Hugging Face
+
+The trained TF-IDF + Logistic Regression model is available on Hugging Face:
+
+[**HassanHijazi/german-ai-text-tfidf-logreg**](https://huggingface.co/HassanHijazi/german-ai-text-tfidf-logreg)
+
+The repository contains the fitted three-class model and metadata and can be loaded directly with `huggingface_hub` and `joblib`.
 
 
-### Length analysis
+## How to Run
 
-Performance depends strongly on text length.
-
-| Length | Samples | Accuracy |
-|---|---:|---:|
-| ≤70 | 399 | 76.94% |
-| 71–150 | 293 | 91.81% |
-| 151–300 | 640 | 92.97% |
-| 301–500 | 342 | 94.74% |
-| 501–750 | 653 | 94.18% |
-| 750+ | 410 | 94.39% |
-
-
-## Files
+Make sure the dataset is available at:
 
 ```text
-05_logreg-baseline/
-├── artifacts/
-├── results/
-│   ├── tfidf-logreg-confmat-3class.svg
-│   ├── tfidf-logreg-confmat-human-ai.svg
-│   └── tfidf-logreg-length-bias-3class.csv
-├── Logestic_Regression.ipynb
-└── README.md
+data/hf-dataset-3class-full
 ```
 
-## Run
-
-This stage requires the dataset prepared in [04 · HF dataset](../04_hf-dataset/).
-
-Install the project dependencies from the repository root:
+Then start JupyterLab from the repository root:
 
 ```bash
-pip install -r requirements.txt
+jupyter lab
 ```
 
-Then run all cells in:
+Open `06_logreg-baseline/logestic_regression.ipynb` and run the cells in order.
 
-```text
-Logestic_Regression.ipynb
-```
+No API key or GPU is required.
 
-<div align="center">
+---
 
-[← 04 · HF dataset](../04_hf-dataset/) · [Project index](../README.md) · [06 · mmBERT-small →](../06_mmBERT-small/)
-
-</div>
+[← 05_luna-6-baseline](../05_luna-6-baseline/) · [07 · mmBERT-small →](../07_mmbert-small/)
