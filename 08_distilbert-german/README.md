@@ -33,17 +33,6 @@ The model performs particularly well on fully AI-generated text, with only **19 
 
 Human-written text is the most difficult class, with **182 of 914 Human samples** classified as either AI-generated or AI-assisted.
 
-### Human vs AI
-
-For the binary Human-vs-AI evaluation, the model reached **99.56% accuracy**.
-
-The binary confusion matrix contains:
-
-- **910** true positives
-- **908** true negatives
-- **6** false positives
-- **2** false negatives
-
 ## Text Length
 
 Performance varies with text length, with very short texts being the most difficult.
