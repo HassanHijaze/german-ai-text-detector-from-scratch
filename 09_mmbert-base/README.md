@@ -1,47 +1,41 @@
-[← 07 · DistilBERT German](../07_distilbert-german/)
+[← 08 · DistilBERT German](https://github.com/HassanHijaze/german-ai-text-detector-from-scratch/blob/main/08_distilbert-german)
 
-# 08 · mmBERT-base
+# 09 · mmBERT-base
 
-Fine-tuning `jhu-clsp/mmBERT-base` for the three-class classification 
-task: **Human**, **AI-generated**, and **AI-assisted** text.
+A fine-tuned transformer model for classifying German text as **Human**, **AI-generated**, or **AI-assisted**.
+
+The model is based on [`jhu-clsp/mmBERT-base`](https://huggingface.co/jhu-clsp/mmBERT-base) and uses a maximum sequence length of 512 tokens.
 
 ## Setup
 
-A fine-tuned transformer classifier based on `jhu-clsp/mmBERT-base`.
+A fine-tuned mmBERT-base transformer classifier for German text.
 
 - Task: three-class sequence classification
 - Classes: Human, AI-generated, AI-assisted
 - Maximum sequence length: 512 tokens
 - Evaluation: train, validation, and held-out test splits
-- Additional analyses: class-specific errors, text-length performance, and 
-binary Human-vs-AI evaluation
+- Additional analyses: class-specific errors, text-length performance, and binary Human-vs-AI evaluation
 - GPU recommended
 
-## Test results
+## Results
 
-Evaluation on the held-out test set of **2,737 texts**:
+| **Split** | **Accuracy** |
+| --------- | ------------ |
+| **Test**  | **96.64%** (macro-F1 **96.65%**) |
 
-| Accuracy | Macro-F1 | Human error | AI-generated error | AI-assisted error |
-|---:|---:|---:|---:|---:|
-| **96.64%** | **96.65%** | 5.58% | 0.99% | 3.51% |
-### Class-specific errors
+| **True class** | **Correct** | **Error** |
+| -------------- | ----------- | --------- |
+| Human          | 94.42%      | 5.58%     |
+| AI-generated   | **99.01%**  | **0.99%** |
+| AI-assisted    | 96.49%      | 3.51%     |
 
-| Class | Error rate |
-|---|---:|
-| Human | 5.58% |
-| AI-generated | 0.99% |
-| AI-assisted | 3.51% |
+The model performs particularly well on **AI-generated text**, with only **9 of 912 samples** misclassified.
 
-The model performs particularly well on fully AI-generated text, with only 
-**9 of 912 AI samples** misclassified.
-
-Human-written text accounts for the largest number of errors, with **51 of 
-914 Human samples** classified as AI-assisted.
+Human-written text accounts for the largest number of errors, with **51 of 914 Human samples** classified as AI-assisted.
 
 ### Human vs AI
 
-For the binary Human-vs-AI evaluation, the model reached **99.84% 
-accuracy**.
+For the binary Human-vs-AI evaluation, the model reached **99.84% accuracy**.
 
 The binary confusion matrix contains:
 
@@ -50,53 +44,29 @@ The binary confusion matrix contains:
 - **2** false positives
 - **1** false negative
 
-### Length analysis
+## Text Length
 
-Performance improves considerably with increasing text length.
+Performance improves considerably as more text becomes available.
 
-| Length | Samples | Accuracy |
-|---|---:|---:|
-| ≤70 | 399 | 89.47% |
-| 71–150 | 293 | 96.59% |
-| 151–300 | 640 | 96.88% |
-| 301–500 | 342 | 99.42% |
-| 501–750 | 653 | 98.47% |
-| 750+ | 410 | 98.05% |
+| **Words** | **Samples** | **Accuracy** |
+| --------- | ----------- | ------------ |
+| ≤70       | 399         | 89.47%       |
+| 71–150    | 293         | 96.59%       |
+| 151–300   | 640         | 96.88%       |
+| 301–500   | 342         | **99.42%**   |
+| 501–750   | 653         | 98.47%       |
+| 750+      | 410         | 98.05%       |
 
+The largest performance drop occurs for texts of **70 words or fewer**. From around 150 words onward, accuracy remains consistently high at approximately **97–99%**.
 
-## Files
+## How to Run
 
-```text
-08_mmbert-base/
-├── artifacts/
-├── results/
-│   ├── mmbert-base-confmat-3class.svg
-│   ├── mmbert-base-confmat-human-ai.svg
-│   └── mmbert-base-length-bias-3class.csv
-├── mmbert_base.ipynb
-└── README.md
-```
+The trained three-class model is available on [**Hugging Face**](https://huggingface.co/HassanHijazi/german-ai-text-mmbert-base) and can be loaded directly with `transformers`.
 
-## Run
+To reproduce the training and evaluation locally, place the dataset at `data/hf-dataset-3class-full`, start JupyterLab from the repository root with `jupyter lab`, and run `09_mmbert-base/mmbert_base.ipynb` from top to bottom.
 
-This stage requires the dataset prepared in [04 · HF 
-dataset](../04_hf-dataset/).
+A GPU is recommended for training and evaluation.
 
-Install the project dependencies from the repository root:
+---
 
-```bash
-pip install -r requirements.txt
-```
-
-Then run all cells in:
-
-```text
-mmbert_base.ipynb
-```
-
-<div align="center">
-
-[← 07 · DistilBERT German](../07_distilbert-german/) · [Project 
-index](../README.md) · [09 · XLM-RoBERTa-base →](../09_xlm-roberta-base/)
-
-</div>
+[← 08 · DistilBERT German](https://github.com/HassanHijaze/german-ai-text-detector-from-scratch/blob/main/08_distilbert-german) · [10 · XLM-RoBERTa base →](https://github.com/HassanHijaze/german-ai-text-detector-from-scratch/blob/main/10_xlm-roberta-base)
