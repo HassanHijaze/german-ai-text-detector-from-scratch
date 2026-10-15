@@ -4,31 +4,20 @@
 
 A classical machine-learning baseline for classifying German text as **Human**, **AI-generated**, or **AI-assisted**.
 
-The model represents each text using TF-IDF word and bigram features and applies Logistic Regression.
-
-## Setup
-
-| Setting | Value |
-|---|---|
-| Training samples | 24,986 |
-| Validation samples | 2,906 |
-| Test samples | 2,737 |
-| Maximum features | 200,000 |
-| Cross-validation | 3-fold StratifiedGroupKFold |
-| Best `C` | 3.0 |
-| Best `min_df` | 5 |
-| Best `ngram_range` | `(1, 2)` |
+The model uses TF-IDF word and bigram features with Logistic Regression.
 
 ## Results
 
 | Metric | Result |
 |---|---:|
-| Validation accuracy | 91.47% |
-| Test accuracy | **91.23%** |
-| Test Macro-F1 | **91.22%** |
-| Human error | 8.53% |
-| AI-generated error | 3.40% |
-| AI-assisted error | 14.38% |
+| Accuracy | **91.23%** |
+| Macro-F1 | **91.22%** |
+
+| Class | Error |
+|---|---:|
+| Human | 8.53% |
+| AI-generated | 3.40% |
+| AI-assisted | 14.38% |
 
 ![TF-IDF + Logistic Regression confusion matrix](./results/tfidf-logreg-confmat-3class.svg)
 
@@ -36,15 +25,16 @@ The model performs best on **AI-generated text** and struggles most with **AI-as
 
 ## Human vs AI-generated
 
-![TF-IDF + Logistic Regression Human vs AI-generated](./results/tfidf-logreg-confmat-human-ai.svg)
+| Metric | Result |
+|---|---:|
+| Samples | 1,826 |
+| Accuracy | **98.96%** |
 
-For the binary Human-vs-AI-generated task, the model reaches **98.96% accuracy** on 1,826 samples.
+![TF-IDF + Logistic Regression Human vs AI-generated](./results/tfidf-logreg-confmat-human-ai.svg)
 
 This shows that the main difficulty in the full three-class task is distinguishing **Human** from **AI-assisted** writing.
 
 ## Text Length
-
-Short texts are clearly more difficult:
 
 | Words | Accuracy |
 |---|---:|
@@ -55,18 +45,17 @@ Short texts are clearly more difficult:
 | 501–750 | 94.18% |
 | 750+ | 94.39% |
 
-From around 150 words onward, performance remains relatively stable at approximately **93–95%**.
+Performance is clearly weaker for very short texts and remains relatively stable from around 150 words onward.
 
-## Hugging Face
+## How to Run
 
-The trained TF-IDF + Logistic Regression model is available on Hugging Face:
+### Use the trained model from Hugging Face
 
 [**HassanHijazi/german-ai-text-tfidf-logreg**](https://huggingface.co/HassanHijazi/german-ai-text-tfidf-logreg)
 
-The repository contains the fitted three-class model and metadata and can be loaded directly with `huggingface_hub` and `joblib`.
+The trained three-class model can be downloaded directly with `huggingface_hub` and loaded with `joblib`.
 
-
-## How to Run
+### Run the notebook
 
 Make sure the dataset is available at:
 
@@ -86,4 +75,4 @@ No API key or GPU is required.
 
 ---
 
-[← 05_luna-6-baseline](../05_luna-6-baseline/) · [07 · mmBERT-small →](../07_mmbert-small/)
+[← 05 · Luna 6 Zero-Shot Baseline](../05_luna-6-baseline/) · [07 · mmBERT-small →](../07_mmbert-small/)
