@@ -6,6 +6,17 @@ A fine-tuned transformer model for classifying German text as **Human**, **AI-ge
 
 The model is based on [`distilbert/distilbert-base-german-cased`](https://huggingface.co/distilbert/distilbert-base-german-cased) and uses a maximum sequence length of 512 tokens.
 
+## Setup
+
+A fine-tuned DistilBERT transformer classifier for German text.
+
+- Task: three-class sequence classification
+- Classes: Human, AI-generated, AI-assisted
+- Maximum sequence length: 512 tokens
+- Evaluation: train, validation, and held-out test splits
+- Additional analyses: class-specific errors, text-length performance, and binary Human-vs-AI evaluation
+- GPU recommended
+
 ## Results
 
 | **Split** | **Accuracy** |
