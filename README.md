@@ -93,16 +93,19 @@ Related texts (the same source document and everything derived from it) always s
 
 ## Models
 
-| Model                        | Type                   |
-| ---------------------------- | ---------------------- |
-| TF-IDF + Logistic Regression | Classical baseline     |
-| DistilBERT German            | Transformer            |
-| mmBERT-small                 | Transformer            |
-| mmBERT-base                  | Transformer            |
-| XLM-RoBERTa base             | Transformer            |
-| GeLECTRA-large               | Transformer            |
-| Luna 6 (via Azure OpenAI)    | Zero-shot LLM baseline |
+Five supervised classifiers were trained or fine-tuned on the same three-class dataset. In addition, Luna 6 was evaluated as a zero-shot LLM baseline without task-specific training.
 
+| Model | Type | Parameters |
+|---|---|---:|
+| TF-IDF + Logistic Regression | Classical baseline | ≤0.60M coefficients* |
+| [DistilBERT German](https://huggingface.co/distilbert/distilbert-base-german-cased) | Transformer | ~67M |
+| [mmBERT-small](https://huggingface.co/jhu-clsp/mmBERT-small) | Transformer | 140M |
+| [XLM-RoBERTa base](https://huggingface.co/FacebookAI/xlm-roberta-base) | Transformer | ~278M |
+| [mmBERT-base](https://huggingface.co/jhu-clsp/mmBERT-base) | Transformer | 307M |
+| [GeLECTRA-large](https://huggingface.co/deepset/gelectra-large) | Transformer | ~335M |
+
+
+\* The Logistic Regression parameter count depends on the fitted TF-IDF vocabulary. With at most 200,000 features and three output classes, the classifier has at most approximately 600,000 learned coefficients; this is not directly comparable to neural-network parameter counts.
 
 ## Results
 
