@@ -17,38 +17,21 @@ Hyperparameters were selected using **3-fold StratifiedGroupKFold cross-validati
 | `ngram_range` | `(1,1)`, `(1,2)` | **(1,2)** |
 | Maximum features | 200,000 | **200,000** |
 
-| Selection result | Accuracy |
-|---|---:|
-| Best 3-fold CV | **90.95%** |
-| Validation | **91.47%** |
-| Final test | **91.23%** |
+| **Split**  | **Accuracy** |
+| ---------- | ------------ |
+| Train      | 99.55% |
+| Validation | 91.47% |
+| **Test**   | **91.23%** (macro-F1 **91.22%**) |
 
-## Results
 
-The final model was evaluated on the held-out test set of **2,737 texts**.
-
-| Metric | Result |
-|---|---:|
-| Accuracy | **91.23%** |
-| Macro-F1 | **91.22%** |
-| Human error | 8.53% |
-| AI-generated error | 3.40% |
-| AI-assisted error | 14.38% |
-
+| **True class** | **Correct** | **Error** | **Most common mistake** |
+|---|---:|---:|---|
+| Human | 91.5% | 8.5% | called AI-assisted (67 of 914) |
+| AI-generated | 96.6% | 3.4% | called AI-assisted (26 of 912) |
+| AI-assisted | 85.6% | 14.4% | called Human (112 of 911) |
 
 The model performs best on **AI-generated text** and struggles most with **AI-assisted text**, particularly when AI-assisted samples are classified as Human.
 
-## Human vs AI-generated
-
-When evaluating only Human and AI-generated texts, the distinction becomes substantially easier.
-
-| Metric | Result |
-|---|---:|
-| Samples | 1,826 |
-| Accuracy | **98.96%** |
-
-
-This indicates that the main difficulty in the three-class task is separating **Human** from **AI-assisted** writing.
 
 ## Text Length
 
@@ -64,38 +47,11 @@ Performance depends strongly on the amount of text available, especially for ver
 | 750+ | 410 | 94.39% | 6.43% | **0.00%** | 10.07% |
 
 The largest performance drop occurs for texts of **70 words or fewer**, where AI-assisted samples are particularly difficult. From around 150 words onward, accuracy remains relatively stable at approximately **93–95%**.
-
 ## How to Run
 
-### Use the trained model
+The trained three-class model is available on [**Hugging Face**](https://huggingface.co/HassanHijazi/german-ai-text-tfidf-logreg) and can be downloaded with `huggingface_hub` and loaded using `joblib`.
 
-The fitted three-class model is available directly on Hugging Face:
-
-[**HassanHijazi/german-ai-text-tfidf-logreg**](https://huggingface.co/HassanHijazi/german-ai-text-tfidf-logreg)
-
-It can be downloaded with `huggingface_hub` and loaded with `joblib`.
-
-### Run the notebook
-
-Make sure the dataset is available at:
-
-```text
-data/hf-dataset-3class-full
-```
-
-Start JupyterLab from the repository root:
-
-```bash
-jupyter lab
-```
-
-Then open:
-
-```text
-06_logreg-baseline/logestic_regression.ipynb
-```
-
-and run the cells in order.
+To reproduce the training and evaluation locally, place the dataset at `data/hf-dataset-3class-full`, start JupyterLab from the repository root with `jupyter lab`, and run `06_logreg-baseline/logestic_regression.ipynb` from top to bottom.
 
 No API key or GPU is required.
 
