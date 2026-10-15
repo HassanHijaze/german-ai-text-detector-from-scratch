@@ -34,16 +34,15 @@ The held-out test set is not used during the learning-curve experiments.
 
 The table below contains the validation accuracies from the individual learning-curve result files.
 
-| **Model** | **1%** | **5%** | **10%** | **12%** | **17.5%** | **25%** | **50%** | **100%** |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| DistilBERT German | 46.4% | 69.1% | — | 75.1% | 78.9% | 82.3% | 87.8% | 90.5% |
-| GeLECTRA-large | 69.3% | 83.3% | 90.1% | — | 93.7% | 93.7% | 94.0% | 95.8% |
-| TF-IDF + Logistic Regression | **76.3%** | 84.2% | — | 87.2% | 88.2% | 89.0% | 90.3% | 91.3% |
-| XLM-RoBERTa base | 51.7% | 60.9% | — | 78.5% | 81.1% | 84.6% | 88.6% | 91.6% |
-| mmBERT-base | 66.0% | **87.2%** | — | **91.4%** | **93.4%** | **94.2%** | **95.1%** | **96.2%** |
-| mmBERT-small | 37.5% | 86.5% | 89.8% | 90.9% | 91.9% | 92.6% | 94.5% | 94.8% |
+| **Model** | **1%** | **5%** | **12%** | **17.5%** | **25%** | **50%** | **100%** |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| DistilBERT German | 46.4% | 69.1% | 75.1% | 78.9% | 82.3% | 87.8% | 90.5% |
+| GeLECTRA-large | 69.3% | 83.3% | 90.1% | 93.7% | 93.7% | 94.0% | 95.8% |
+| TF-IDF + Logistic Regression | **76.3%** | 84.2% | 87.2% | 88.2% | 89.0% | 90.3% | 91.3% |
+| XLM-RoBERTa base | 51.7% | 60.9% | 78.5% | 81.1% | 84.6% | 88.6% | 91.6% |
+| mmBERT-base | 66.0% | **87.2%** | **91.4%** | **93.4%** | **94.2%** | **95.1%** | **96.2%** |
+| mmBERT-small | 37.5% | 86.5% | 90.9% | 91.9% | 92.6% | 94.5% | 94.8% |
 
-GeLECTRA-large was evaluated at **10% (2,499 texts)** rather than 12%. mmBERT-small contains results for both 10% and 12%. The remaining models were evaluated at 12%.
 
 ## Results
 
@@ -65,7 +64,7 @@ The learning curves show different behavior across the models.
 
 The **mmBERT models** benefit strongly from the first increases in training size. mmBERT-base rises from **66.0% at 1%** to **91.4% at 12%**, while mmBERT-small rises from **37.5% to 90.9%** over the same range.
 
-**GeLECTRA-large** also learns quickly, increasing from **69.3% at 1%** to **90.1% at 10%**.
+**GeLECTRA-large** also learns quickly, increasing from **69.3% at 1%** to **90.1% at 12%**.
 
 **DistilBERT German** and **XLM-RoBERTa base** improve more gradually and continue to gain substantially as more training data is added.
 
