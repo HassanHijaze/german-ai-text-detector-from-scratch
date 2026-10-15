@@ -4,6 +4,8 @@ A three-class machine learning project for distinguishing **human-written**, **A
 
 Unlike conventional binary Human-vs-AI detectors, this project treats **AI-assisted writing** — human text rewritten or polished by a language model — as a separate class.
 
+**Models on Hugging Face:** [mmBERT-small](https://huggingface.co/HassanHijazi/german-ai-text-mmbert-small) · [mmBERT-base](https://huggingface.co/HassanHijazi/german-ai-text-mmbert-base) · [GeLECTRA-large](https://huggingface.co/HassanHijazi/german-ai-text-gelectra-large) · [XLM-RoBERTa base](https://huggingface.co/HassanHijazi/german-ai-text-xlm-roberta-base) · [DistilBERT German](https://huggingface.co/HassanHijazi/german-ai-text-distilbert-german) · [TF-IDF + Logistic Regression](https://huggingface.co/HassanHijazi/german-ai-text-tfidf-logreg)
+
 ## At a glance
 
 - **30,629 texts** across three classes
