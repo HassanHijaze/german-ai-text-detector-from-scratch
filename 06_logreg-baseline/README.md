@@ -6,54 +6,74 @@ A classical machine-learning baseline for classifying German text as **Human**, 
 
 The model uses TF-IDF word and bigram features with Logistic Regression.
 
+## Tuning
+
+Hyperparameters were selected using **3-fold StratifiedGroupKFold cross-validation** on the training data. The held-out test set was used only for the final evaluation.
+
+| Parameter | Values tested | Best |
+|---|---|---:|
+| `C` | 0.3, 1.0, 3.0 | **3.0** |
+| `min_df` | 2, 5 | **5** |
+| `ngram_range` | `(1,1)`, `(1,2)` | **(1,2)** |
+| Maximum features | 200,000 | **200,000** |
+
+| Selection result | Accuracy |
+|---|---:|
+| Best 3-fold CV | **90.95%** |
+| Validation | **91.47%** |
+| Final test | **91.23%** |
+
 ## Results
+
+The final model was evaluated on the held-out test set of **2,737 texts**.
 
 | Metric | Result |
 |---|---:|
 | Accuracy | **91.23%** |
 | Macro-F1 | **91.22%** |
+| Human error | 8.53% |
+| AI-generated error | 3.40% |
+| AI-assisted error | 14.38% |
 
-| Class | Error |
-|---|---:|
-| Human | 8.53% |
-| AI-generated | 3.40% |
-| AI-assisted | 14.38% |
 
-![TF-IDF + Logistic Regression confusion matrix](./results/tfidf-logreg-confmat-3class.svg)
-
-The model performs best on **AI-generated text** and struggles most with **AI-assisted text**, especially when it is classified as Human.
+The model performs best on **AI-generated text** and struggles most with **AI-assisted text**, particularly when AI-assisted samples are classified as Human.
 
 ## Human vs AI-generated
+
+When evaluating only Human and AI-generated texts, the distinction becomes substantially easier.
 
 | Metric | Result |
 |---|---:|
 | Samples | 1,826 |
 | Accuracy | **98.96%** |
 
-![TF-IDF + Logistic Regression Human vs AI-generated](./results/tfidf-logreg-confmat-human-ai.svg)
 
-This shows that the main difficulty in the full three-class task is distinguishing **Human** from **AI-assisted** writing.
+This indicates that the main difficulty in the three-class task is separating **Human** from **AI-assisted** writing.
 
 ## Text Length
 
-| Words | Accuracy |
-|---|---:|
-| ≤70 | 76.94% |
-| 71–150 | 91.81% |
-| 151–300 | 92.97% |
-| 301–500 | **94.74%** |
-| 501–750 | 94.18% |
-| 750+ | 94.39% |
+Performance depends strongly on the amount of text available, especially for very short samples.
 
-Performance is clearly weaker for very short texts and remains relatively stable from around 150 words onward.
+| Words | Samples | Accuracy | Human error | AI-generated error | AI-assisted error |
+|---|---:|---:|---:|---:|---:|
+| ≤70 | 399 | 76.94% | 19.40% | 11.19% | 38.93% |
+| 71–150 | 293 | 91.81% | 9.57% | 2.46% | 15.58% |
+| 151–300 | 640 | 92.97% | 7.73% | 2.86% | 11.70% |
+| 301–500 | 342 | **94.74%** | 4.72% | 3.37% | 6.80% |
+| 501–750 | 653 | 94.18% | 5.58% | 1.57% | 9.61% |
+| 750+ | 410 | 94.39% | 6.43% | **0.00%** | 10.07% |
+
+The largest performance drop occurs for texts of **70 words or fewer**, where AI-assisted samples are particularly difficult. From around 150 words onward, accuracy remains relatively stable at approximately **93–95%**.
 
 ## How to Run
 
-### Use the trained model from Hugging Face
+### Use the trained model
+
+The fitted three-class model is available directly on Hugging Face:
 
 [**HassanHijazi/german-ai-text-tfidf-logreg**](https://huggingface.co/HassanHijazi/german-ai-text-tfidf-logreg)
 
-The trained three-class model can be downloaded directly with `huggingface_hub` and loaded with `joblib`.
+It can be downloaded with `huggingface_hub` and loaded with `joblib`.
 
 ### Run the notebook
 
@@ -63,13 +83,19 @@ Make sure the dataset is available at:
 data/hf-dataset-3class-full
 ```
 
-Then start JupyterLab from the repository root:
+Start JupyterLab from the repository root:
 
 ```bash
 jupyter lab
 ```
 
-Open `06_logreg-baseline/logestic_regression.ipynb` and run the cells in order.
+Then open:
+
+```text
+06_logreg-baseline/logestic_regression.ipynb
+```
+
+and run the cells in order.
 
 No API key or GPU is required.
 
