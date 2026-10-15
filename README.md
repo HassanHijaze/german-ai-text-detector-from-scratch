@@ -154,19 +154,20 @@ The following table reports overall classification error across all three classe
 The clearest pattern is that **very short texts are substantially harder to classify**. All supervised models show their highest error rates on texts of 70 words or fewer.
 
 
-## Key findings
+## Key Findings
 
+- **GeLECTRA-large achieved the strongest in-distribution performance**, with the highest accuracy and Macro-F1 on the held-out test set.
 
-- **A zero-shot LLM is not enough.** Luna 6 reaches only **55.64% accuracy** and **50.83% Macro-F1** on the same held-out test set, far below the supervised models, which achieve between **90.83% and 96.89% accuracy**. Its main weakness is AI-assisted text, where the error rate reaches **91.22%**.
+- **mmBERT-base showed the strongest generalization to unseen data**, maintaining nearly the same performance on the out-of-distribution evaluation set.
 
-- **A simple baseline goes surprisingly far.** TF-IDF + Logistic Regression reaches **91.23% test accuracy** without Transformer fine-tuning, showing that lexical patterns alone provide a strong baseline for this task.
+- **High test-set accuracy did not always translate into robust generalization.** In particular, mmBERT-small performed strongly on the original test set but showed a much larger performance drop on unseen-source data.
 
-- **Doing well on the test set isn't enough.** On the held-out academic test set, mmBERT-small (**95.94%**), mmBERT-base (**96.64%**) and GeLECTRA-large (**96.89%**) perform similarly. On texts from previously unseen source domains, mmBERT-base (**96.55%**) and GeLECTRA-large (**96.32%**) remain strong, while mmBERT-small drops to **81.13%**. OOD evaluation is what clearly separates their generalization performance.
+- **Short texts were consistently more difficult to classify** than medium- and long-length texts across the evaluated models.
 
-- **AI-assisted text is harder than fully AI-generated text.** Across the supervised models, AI-generated text has very low error rates of **0.88%–3.40%**, while AI-assisted text produces higher error rates of **3.07%–14.38%**.
+- **AI-assisted texts were harder to distinguish than fully AI-generated texts**, indicating that partial human authorship makes detection substantially more challenging.
 
-- **Short texts are substantially harder.** For texts of **70 words or fewer**, error rates range from **9.27% to 23.06%**, considerably higher than for longer texts.
-The repository reports more than accuracy: three-class confusion matrices, class-specific performance, prediction confidence, length-bias analysis, training vs. validation accuracy (generalization gap), learning curves, and the zero-shot LLM comparison.
+- **Increasing model complexity generally improved performance, but architecture choice mattered more than size alone.** The experiments showed substantial differences in robustness between Transformer models with otherwise similar in-distribution results.
+
 
 ## Limitations
 
@@ -191,7 +192,7 @@ cd german-ai-text-detector-from-scratch
 pip install -r requirements.txt
 
 ```
-
+Copy `.env.example` to `.env` and add the credentials required for the stages you want to run. API keys are needed for the AI-generation and external API stages. The dataset is private, so stages that load it from the Hugging Face Hub require access permission; the trained model repositories are public. Each stage contains its own README with specific setup and execution instructions.
 
 ## Authors
 
