@@ -13,88 +13,6 @@ Unlike conventional binary Human-vs-AI detectors, this project treats **AI-assis
 - Evaluation includes learning curves, class errors, length bias, calibration, and OOD generalization
 
 
-
-## Dataset
-
-### Human texts
-
-| Source   | Type                                          |
-| -------- | --------------------------------------------- |
-| SSOAR    | Open-access repository for social sciences    |
-| peDOCS   | Open-access repository for education research |
-| Refubium | Freie Universität Berlin repository           |
-
-Only openly licensed material was kept (CC BY, CC BY-SA, CC0, Public Domain). The texts come from German academic documents published before the widespread use of generative AI. Source and license information is stored per sample.
-
-
-### AI-generated and AI-assisted texts
-
-For most human samples, an AI-generated and an AI-assisted counterpart were created with the prompts in this repository.
-
-- **AI-assisted:** the model receives the human text and rewrites or polishes it while preserving meaning, argument, order of ideas, citations, and numbers.
-- **AI-generated:** the model writes a new academic text on the same topic with its own wording and structure.
-
-
-
-
-
-| Generator         | AI-generated | AI-assisted |
-| ----------------- | -----------: | ----------: |
-| GPT-5.6 Luna      |        2,491 |       2,489 |
-| Gemini 3.8 Flash  |        2,494 |       2,493 |
-| DeepSeek V4 Flash |        2,497 |       2,500 |
-| GPT-6 Luna        |        2,721 |       2,718 |
-
-### Class and split sizes
-
-| Class        |    Samples |
-| ------------ | ---------: |
-| Human        |     10,227 |
-| AI-generated |     10,203 |
-| AI-assisted  |     10,199 |
-| **Total**    | **30,629** |
-
-| Split      | Human |    AI | AI-assisted |  Total |
-| ---------- | ----: | ----: | ----------: | -----: |
-| Train      | 8,342 | 8,324 |       8,320 | 24,986 |
-| Validation |   971 |   967 |         968 |  2,906 |
-| Test       |   914 |   912 |         911 |  2,737 |
-
-
-### Out-of-distribution evaluation
-
-To evaluate generalization beyond the academic training distribution, all six supervised models were tested on a separate dataset of **869 texts**:
-
-- **290 Human**
-- **289 AI-generated**
-- **290 AI-assisted**
-
-The human texts come from previously unseen domains:
-
-- German Wikipedia — encyclopedic text
-- German Wikinews — news
-- German Wikivoyage — travel
-- German Wikibooks — instructional text
-
-The same four LLM families used in the main dataset were used to create the corresponding AI-generated and AI-assisted samples.
-
-
-
-## Models
-
-Six supervised classifiers were trained or fine-tuned on the same three-class dataset. In addition, Luna-6 was evaluated as a zero-shot LLM baseline without task-specific training.
-
-| Model | Type | Parameters |
-|---|---|---:|
-| TF-IDF + Logistic Regression | Classical baseline | ≤0.60M coefficients* |
-| [DistilBERT German](https://huggingface.co/distilbert/distilbert-base-german-cased) | Transformer | ~67M |
-| [mmBERT-small](https://huggingface.co/jhu-clsp/mmBERT-small) | Transformer | 140M |
-| [XLM-RoBERTa base](https://huggingface.co/FacebookAI/xlm-roberta-base) | Transformer | ~278M |
-| [mmBERT-base](https://huggingface.co/jhu-clsp/mmBERT-base) | Transformer | 307M |
-| [GeLECTRA-large](https://huggingface.co/deepset/gelectra-large) | Transformer | ~335M |
-| Luna 6 (Azure OpenAI) | Zero-shot LLM baseline | Not publicly disclosed |
-
-
 ## Repository guide
 
 | Stage | Folder | Purpose |
@@ -113,6 +31,61 @@ Six supervised classifiers were trained or fine-tuned on the same three-class da
 | 12 | [`12_learning-curves`](./12_learning-curves/) | Learning-curve experiments |
 | 13 | [`13_model-comparison`](./13_model-comparison/) | Cross-model comparison |
 | 14 | [`14_ood-model-comparison`](./14_ood-model-comparison/) | Out-of-distribution model comparison |
+
+
+
+
+## Dataset
+
+The dataset contains **30,629 German texts** in three classes:
+
+| Class | Samples |
+|---|---:|
+| Human | 10,227 |
+| AI-generated | 10,203 |
+| AI-assisted | 10,199 |
+| **Total** | **30,629** |
+
+Human texts were collected from **SSOAR, peDOCS, and Refubium** and consist of openly licensed German academic documents published before the widespread use of generative AI.
+
+For most human samples, corresponding AI texts were created using **GPT-5.6 Luna, Gemini 3.8 Flash, DeepSeek V4 Flash, and GPT-6 Luna**:
+
+- **AI-generated:** a new text on the same topic with independent wording and structure.
+- **AI-assisted:** the original human text is rewritten and polished while preserving its meaning and structure.
+
+The dataset was split at document level to reduce source leakage:
+
+| Split | Samples |
+|---|---:|
+| Train | 24,986 |
+| Validation | 2,906 |
+| Test | 2,737 |
+
+### OOD dataset
+
+Generalization was evaluated on an additional **869-text out-of-distribution dataset** containing:
+
+- 290 Human
+- 289 AI-generated
+- 290 AI-assisted
+
+Human texts were drawn from **German Wikipedia, Wikinews, Wikivoyage, and Wikibooks**, introducing encyclopedic, news, travel, and instructional domains not present in the academic training data.
+
+
+## Models
+
+Six supervised classifiers were trained or fine-tuned on the same three-class dataset. In addition, Luna-6 was evaluated as a zero-shot LLM baseline without task-specific training.
+
+| Model | Type | Parameters |
+|---|---|---:|
+| TF-IDF + Logistic Regression | Classical baseline | ≤0.60M coefficients* |
+| [DistilBERT German](https://huggingface.co/distilbert/distilbert-base-german-cased) | Transformer | ~67M |
+| [mmBERT-small](https://huggingface.co/jhu-clsp/mmBERT-small) | Transformer | 140M |
+| [XLM-RoBERTa base](https://huggingface.co/FacebookAI/xlm-roberta-base) | Transformer | ~278M |
+| [mmBERT-base](https://huggingface.co/jhu-clsp/mmBERT-base) | Transformer | 307M |
+| [GeLECTRA-large](https://huggingface.co/deepset/gelectra-large) | Transformer | ~335M |
+| Luna 6 (Azure OpenAI) | Zero-shot LLM baseline | Not publicly disclosed |
+
 
 
 
