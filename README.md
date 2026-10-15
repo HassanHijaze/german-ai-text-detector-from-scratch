@@ -2,45 +2,15 @@
 
 A three-class machine learning project for distinguishing **human-written**, **AI-generated**, and **AI-assisted** German text.
 
-The project covers the complete pipeline from data collection and AI-text generation to dataset construction, model training, learning curves, error analysis, and out-of-distribution evaluation.
-
 Unlike conventional binary Human-vs-AI detectors, this project treats **AI-assisted writing** — human text rewritten or polished by a language model — as a separate class.
-
-> **Top held-out result:** GeLECTRA-large reaches **96.89% accuracy** and **96.91% Macro-F1**, closely followed by mmBERT-base at **96.64% accuracy**.  
-> **Top OOD results:** mmBERT-base reaches **96.55% accuracy**, closely followed by GeLECTRA-large at **96.32%**, on 869 texts from previously unseen source domains.
 
 ## At a glance
 
 - **30,629 texts** across three classes
-- **10,227 human texts** from **4,121 academic source documents**
-- AI-generated and AI-assisted texts from **four LLM families**
-- Document-level train / validation / test splitting to reduce source leakage
-- **6 supervised classifiers** and **1 zero-shot LLM baseline**
-- Best held-out test accuracy: **96.89% — GeLECTRA-large**
-- Best OOD accuracy: **96.55% — mmBERT-base**
-- Evaluation includes **Macro-F1, confusion matrices, class-specific errors, text-length analysis, learning curves, calibration, and OOD generalization**
-
-
-
-
-## Repository guide
-
-| Stage | Folder | Purpose |
-|---:|---|---|
-| 01 | [`01_human-data`](./01_human-data/) | Collect and clean German academic human text |
-| 02 | [`02_ai-generated-data`](./02_ai-generated-data/) | Generate AI and AI-assisted counterparts |
-| 03 | [`03_pangram-test`](./03_pangram-test/) | External Human-vs-AI sanity check |
-| 04 | [`04_hf-dataset`](./04_hf-dataset/) | Build the final Hugging Face dataset |
-| 05 | [`05_logreg-baseline`](./05_logreg-baseline/) | TF-IDF + Logistic Regression baseline |
-| 06 | [`06_mmBERT-small`](./06_mmBERT-small/) | mmBERT-small experiments |
-| 07 | [`07_distilbert-german`](./07_distilbert-german/) | DistilBERT German experiments |
-| 08 | [`08_mmbert-base`](./08_mmbert-base/) | mmBERT-base experiments |
-| 09 | [`09_xlm-roberta-base`](./09_xlm-roberta-base/) | XLM-RoBERTa-base experiments |
-| 10 | [`10_Gelectra-large`](./10_Gelectra-large/) | GeLECTRA-large experiments |
-| 11 | [`11_luna-6-baseline`](./11_luna-6-baseline/) | Luna-6 zero-shot baseline |
-| 12 | [`12_learning-curves`](./12_learning-curves/) | Learning-curve experiments |
-| 13 | [`13_model-comparison`](./13_model-comparison/) | Cross-model comparison |
-| 14 | [`14_ood-model-comparison`](./14_ood-model-comparison/) | Out-of-distribution model comparison |
+- **6 supervised models** + **1 zero-shot LLM baseline**
+- Top test accuracy: **96.89% — GeLECTRA-large**
+- Top OOD accuracy: **96.55% — mmBERT-base**
+- Evaluation includes learning curves, class errors, length bias, calibration, and OOD generalization
 
 
 
@@ -125,52 +95,58 @@ Six supervised classifiers were trained or fine-tuned on the same three-class da
 | Luna 6 (Azure OpenAI) | Zero-shot LLM baseline | Not publicly disclosed |
 
 
+## Repository guide
+
+| Stage | Folder | Purpose |
+|---:|---|---|
+| 01 | [`01_human-data`](./01_human-data/) | Collect and clean German academic human text |
+| 02 | [`02_ai-generated-data`](./02_ai-generated-data/) | Generate AI and AI-assisted counterparts |
+| 03 | [`03_pangram-test`](./03_pangram-test/) | External Human-vs-AI sanity check |
+| 04 | [`04_hf-dataset`](./04_hf-dataset/) | Build the final Hugging Face dataset |
+| 05 | [`05_logreg-baseline`](./05_logreg-baseline/) | TF-IDF + Logistic Regression baseline |
+| 06 | [`06_mmBERT-small`](./06_mmBERT-small/) | mmBERT-small experiments |
+| 07 | [`07_distilbert-german`](./07_distilbert-german/) | DistilBERT German experiments |
+| 08 | [`08_mmbert-base`](./08_mmbert-base/) | mmBERT-base experiments |
+| 09 | [`09_xlm-roberta-base`](./09_xlm-roberta-base/) | XLM-RoBERTa-base experiments |
+| 10 | [`10_Gelectra-large`](./10_Gelectra-large/) | GeLECTRA-large experiments |
+| 11 | [`11_luna-6-baseline`](./11_luna-6-baseline/) | Luna-6 zero-shot baseline |
+| 12 | [`12_learning-curves`](./12_learning-curves/) | Learning-curve experiments |
+| 13 | [`13_model-comparison`](./13_model-comparison/) | Cross-model comparison |
+| 14 | [`14_ood-model-comparison`](./14_ood-model-comparison/) | Out-of-distribution model comparison |
+
+
 
 ## Results
 
-### Main model comparison
+The six supervised models were evaluated on the held-out test set of **2,737 texts** and on a separate out-of-distribution (OOD) dataset of **869 texts** from previously unseen source domains.
 
-The supervised models were evaluated on the held-out academic test set and on a separate out-of-distribution (OOD) dataset containing 869 texts from previously unseen source domains.
+| Model | Test Accuracy | Macro-F1 | OOD Accuracy | Test Human false-positive rate |
+|---|---:|---:|---:|---:|
+| GeLECTRA-large | **96.89%** | **96.91%** | 96.32% | **4.70%** |
+| mmBERT-base | 96.64% | 96.65% | **96.55%** | 5.58% |
+| mmBERT-small | 95.94% | 95.95% | 81.13% | 6.24% |
+| TF-IDF + Logistic Regression | 91.23% | 91.22% | 79.40% | 8.53% |
+| XLM-RoBERTa base | 91.09% | 91.03% | 91.83% | 21.66% |
+| DistilBERT German | 90.83% | 90.82% | 89.41% | 19.91% |
 
-| Model | Test Accuracy | OOD Accuracy | OOD Human vs AI Accuracy |
-|---|---:|---:|---:|
-| **mmBERT-base** | 96.64% | **96.55%** | **98.27%** |
-| **GeLECTRA-large** | **96.89%** | 96.32% | 96.37% |
-| XLM-RoBERTa base | 91.09% | 91.83% | 91.36% |
-| DistilBERT German | 90.83% | 89.41% | 90.33% |
-| mmBERT-small | 95.94% | 81.13% | 74.44% |
-| TF-IDF + Logistic Regression | 91.23% | 79.40% | 96.89% |
+The **Test Human false-positive rate** is the share of human-written test texts that were incorrectly classified as either AI-generated or AI-assisted.
 
+The OOD evaluation shows a clear difference in generalization. mmBERT-base and GeLECTRA-large retain almost all of their held-out performance, while mmBERT-small drops from **95.94%** test accuracy to **81.13%** OOD accuracy.
 
 ### Learning curves
 
-Each supervised model was trained on 1%, 5%, 12%, 17.5%, 25%, 50%, and 100% of the training data. Validation accuracy at 100%:
+Each supervised model was trained on **1%, 5%, 12%, 17.5%, 25%, 50%, and 100%** of the training data. The following table shows validation accuracy at 100% of the training data.
 
-| Model                        | Validation accuracy |
-| ---------------------------- | ------------------: |
-| **mmBERT-base**              |          **96.25%** |
-| GeLECTRA-large               |              95.84% |
-| mmBERT-small                 |              94.84% |
-| XLM-RoBERTa base             |              91.60% |
-| TF-IDF + Logistic Regression |              91.33% |
-| DistilBERT German            |              90.50% |
+| Model | Validation Accuracy |
+|---|---:|
+| **mmBERT-base** | **96.25%** |
+| GeLECTRA-large | 95.84% |
+| mmBERT-small | 94.84% |
+| XLM-RoBERTa base | 91.60% |
+| TF-IDF + Logistic Regression | 91.33% |
+| DistilBERT German | 90.50% |
 
-
-### Final results
-
-The six supervised models were evaluated on the held-out test set of 2,737 texts (914 Human, 912 AI-generated, 911 AI-assisted). Luna-6 was evaluated separately on a balanced sample of approximately 9,000 texts. "Human flagged as AI or AI-assisted" is the share of human texts predicted as anything other than Human.
-
-| Model | Accuracy | Macro-F1 | Human flagged as AI or AI-assisted |
-|---|---:|---:|---:|
-| **GeLECTRA-large** | **96.89%** | **96.91%** | **4.70%** |
-| mmBERT-base | 96.64% | 96.65% | 5.58% |
-| mmBERT-small | 95.94% | 95.95% | 6.24% |
-| TF-IDF + Logistic Regression | 91.23% | 91.22% | 8.53% |
-| XLM-RoBERTa base | 91.09% | 91.03% | 21.66% |
-| DistilBERT German | 90.83% | 90.82% | 19.91% |
-| Luna-6 zero-shot* | 57.03% | 54.96% | 4.78% |
-
-
+These values come from the learning-curve experiments and therefore represent **validation performance**, not the final held-out test results.
 
 ### Error rate per class
 
@@ -182,12 +158,11 @@ The six supervised models were evaluated on the held-out test set of 2,737 texts
 | TF-IDF + Logistic Regression | 8.53% | 3.40% | 14.38% |
 | XLM-RoBERTa base | 21.66% | 0.88% | 4.17% |
 | DistilBERT German | 19.91% | 2.08% | 5.49% |
-| Luna-6 zero-shot* | 4.78% | 47.53% | 76.53% |
+| Luna 6 zero-shot* | 4.78% | 47.53% | 76.53% |
 
+\* Luna 6 was not fine-tuned and was evaluated on a separate balanced sample of approximately 9,000 texts, so its result is shown as a reference rather than a directly comparable test score.
 
----
-
-## Error rate by text length
+### Error rate by text length
 
 The following table reports overall classification error across all three classes for different text-length bins.
 
@@ -202,8 +177,7 @@ The following table reports overall classification error across all three classe
 | 501–750 | 653 | 5.82% | 7.50% | 6.43% | 1.99% | **1.53%** | 2.14% |
 | 750+ | 410 | 5.61% | 8.54% | 8.78% | **1.22%** | 1.95% | **1.22%** |
 
-The clearest pattern is that **very short texts are substantially harder to classify**.
-
+The clearest pattern is that **very short texts are substantially harder to classify**. All supervised models show their highest error rates on texts of 70 words or fewer.
 
 
 ## Key findings
