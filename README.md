@@ -18,20 +18,15 @@ Unlike conventional binary Human-vs-AI detectors, this project treats **AI-assis
 | Stage | Folder | Purpose |
 |---:|---|---|
 | 01 | [`01_human-data`](./01_human-data/) | Collect and clean German academic human text |
-| 02 | [`02_ai-generated-data`](./02_ai-generated-data/) | Generate AI and AI-assisted counterparts |
+| 02 | [`02_ai-generated-data`](./02_ai-generated-data/) | Generate AI-generated and AI-assisted texts |
 | 03 | [`03_pangram-test`](./03_pangram-test/) | External Human-vs-AI sanity check |
 | 04 | [`04_hf-dataset`](./04_hf-dataset/) | Build the final Hugging Face dataset |
 | 05 | [`05_logreg-baseline`](./05_logreg-baseline/) | TF-IDF + Logistic Regression baseline |
-| 06 | [`06_mmBERT-small`](./06_mmBERT-small/) | mmBERT-small experiments |
-| 07 | [`07_distilbert-german`](./07_distilbert-german/) | DistilBERT German experiments |
-| 08 | [`08_mmbert-base`](./08_mmbert-base/) | mmBERT-base experiments |
-| 09 | [`09_xlm-roberta-base`](./09_xlm-roberta-base/) | XLM-RoBERTa-base experiments |
-| 10 | [`10_Gelectra-large`](./10_Gelectra-large/) | GeLECTRA-large experiments |
-| 11 | [`11_luna-6-baseline`](./11_luna-6-baseline/) | Luna-6 zero-shot baseline |
-| 12 | [`12_learning-curves`](./12_learning-curves/) | Learning-curve experiments |
-| 13 | [`13_model-comparison`](./13_model-comparison/) | Cross-model comparison |
-| 14 | [`14_ood-model-comparison`](./14_ood-model-comparison/) | Out-of-distribution model comparison |
-
+| 06 | [`06_luna6-baseline`](./06_luna6-baseline/) | Luna 6 zero-shot baseline |
+| 07 | [`07_fine-tuning`](./07_fine-tuning/) | Fine-tune and evaluate Transformer classifiers |
+| 08 | [`08_learning-curves`](./08_learning-curves/) | Learning-curve experiments |
+| 09 | [`09_model-comparison`](./09_model-comparison/) | Compare all trained models |
+| 10 | [`10_ood-model-comparison`](./10_ood-model-comparison/) | Out-of-distribution evaluation |
 
 
 
