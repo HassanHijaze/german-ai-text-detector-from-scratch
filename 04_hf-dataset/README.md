@@ -29,10 +29,8 @@ text (a new text on the same topic).
 | label | name | meaning |
 |---|---|---|
 | 0 | `human` | Original human-written text |
-| 1 | `ai_generated` | A new text on the same topic, written by an AI 
-model |
-| 2 | `ai_assisted` | The human text, rewritten and polished by an AI 
-model |
+| 1 | `ai_generated` | A new text on the same topic, written by an AI model |
+| 2 | `ai_assisted` | The human text, rewritten and polished by an AI model |
 
 ## Size
 
@@ -62,21 +60,15 @@ background material. DeepSeek only saw 3 topics extracted from it (see the
 
 | field | description |
 |---|---|
-| `id` | `human-<n>`, `assisted-<n>` or `generated-<n>`, where `<n>` is 
-the human original's ID |
+| `id` | `human-<n>`, `assisted-<n>` or `generated-<n>`, where `<n>` is the human original's ID |
 | `text` | The text |
 | `label` | 0 = human, 1 = ai_generated, 2 = ai_assisted |
-| `seed_sample_id` | For AI rows: ID of the human original (empty for 
-human rows) |
-| `source`, `source_name`, `document_id` | Repository and original 
-document |
-| `title`, `author`, `publication_year`, `document_type` | The original 
-document |
-| `license_name`, `license_url`, `source_url` | Licence and link to the 
-original |
+| `seed_sample_id` | For AI rows: ID of the human original (empty for human rows) |
+| `source`, `source_name`, `document_id` | Repository and original document |
+| `title`, `author`, `publication_year`, `document_type` | The original document |
+| `license_name`, `license_url`, `source_url` | Licence and link to the original |
 | `target_length`, `word_count` | Planned and actual length in words |
-| `generator_model`, `generator_company`, `strategy` | Which model made an 
-AI row, and how (`rewrite`, `source_based`, `topics`) |
+| `generator_model`, `generator_company`, `strategy` | Which model made an AI row, and how (`rewrite`, `source_based`, `topics`) |
 
 ## Load it
 
