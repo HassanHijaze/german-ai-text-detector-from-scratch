@@ -15,6 +15,7 @@ accelerate>=1.0
 huggingface-hub>=0.26
 sentencepiece>=0.2
 safetensors>=0.4
+peft>=0.13
 
 # PyTorch
 torch>=2.2
@@ -32,10 +33,11 @@ python-dotenv>=1.0
 
 # API-based generation / zero-shot evaluation
 openai>=1.50
-google-genai>=1.0
 
 # HTTP / data collection
 requests>=2.32
+beautifulsoup4>=4.12
+langdetect>=1.0.9
 
 # PDF processing
 PyMuPDF>=1.24
