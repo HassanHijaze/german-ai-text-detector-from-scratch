@@ -29,19 +29,19 @@ text (a new text on the same topic).
 | label | name | meaning |
 |---|---|---|
 | 0 | `human` | Original human-written text |
-| 1 | `ai_assisted` | The human text, rewritten and polished by an AI 
+| 1 | `ai_generated` | A new text on the same topic, written by an AI 
 model |
-| 2 | `ai_generated` | A new text on the same topic, written by an AI 
+| 2 | `ai_assisted` | The human text, rewritten and polished by an AI 
 model |
 
 ## Size
 
-| Split | Human | AI-assisted | AI-generated | Total |
+| Split | Human | AI-generated | AI-assisted | Total |
 |---|---:|---:|---:|---:|
-| Train | 8,342 | 8,320 | 8,324 | 24,986 |
-| Validation | 971 | 968 | 967 | 2,906 |
-| Test | 914 | 911 | 912 | 2,737 |
-| **Total** | **10,227** | **10,199** | **10,203** | **30,629** |
+| Train | 8,342 | 8,324 | 8,320 | 24,986 |
+| Validation | 971 | 967 | 968 | 2,906 |
+| Test | 914 | 912 | 911 | 2,737 |
+| **Total** | **10,227** | **10,203** | **10,199** | **30,629** |
 
 All texts made from the same human original are in the same split, and no 
 source document appears in more than one split.
@@ -65,7 +65,7 @@ background material. DeepSeek only saw 3 topics extracted from it (see the
 | `id` | `human-<n>`, `assisted-<n>` or `generated-<n>`, where `<n>` is 
 the human original's ID |
 | `text` | The text |
-| `label` | 0 = human, 1 = ai_assisted, 2 = ai_generated |
+| `label` | 0 = human, 1 = ai_generated, 2 = ai_assisted |
 | `seed_sample_id` | For AI rows: ID of the human original (empty for 
 human rows) |
 | `source`, `source_name`, `document_id` | Repository and original 
@@ -84,8 +84,8 @@ AI row, and how (`rewrite`, `source_based`, `topics`) |
 from datasets import load_dataset
 
 ds = load_dataset("{{HF_REPO_ID}}")
-print(ds["train"].features["label"].names)  # ['human', 'ai_assisted', 
-'ai_generated']
+print(ds["train"].features["label"].names)  # ['human', 'ai_generated', 
+'ai_assisted']
 ```
 
 ## Licence and attribution
