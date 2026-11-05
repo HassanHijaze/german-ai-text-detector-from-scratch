@@ -7,7 +7,7 @@ Override from the notebook, e.g.:
 
 from pathlib import Path
 
-# Repo root (this file is in <repo>/02_ai_generation/ai_generation/)
+# Repo root (this file is in <repo>/02_ai-generated-data/ai_generation/)
 REPO_ROOT = Path(__file__).resolve().parents[2]
 ENV_FILE = REPO_ROOT / ".env"
 
