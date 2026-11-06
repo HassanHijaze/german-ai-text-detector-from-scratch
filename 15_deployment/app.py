@@ -3,10 +3,16 @@
 Classifies a German text as Human, AI-generated or AI-assisted with the
 fine-tuned mmBERT-base model. The model folder is set with MODEL_DIR
 (inside the Docker image: /app/model).
+
+Probabilities are calibrated with the temperature stored in the model's
+detector-config.json (temperature scaling, fitted on the validation set).
+If the file is missing, the raw (uncalibrated) probabilities are used.
 """
 
 import html
+import json
 import os
+from pathlib import Path
 
 import gradio as gr
 import torch
@@ -42,6 +48,22 @@ tokenizer = AutoTokenizer.from_pretrained(MODEL_DIR)
 model = AutoModelForSequenceClassification.from_pretrained(MODEL_DIR).eval()
 
 
+def load_temperature(model_dir: str) -> float:
+    """Read the calibration temperature from detector-config.json (1.0 = no calibration)."""
+    config_path = Path(model_dir) / "detector-config.json"
+    if not config_path.exists():
+        print("detector-config.json not found: using uncalibrated probabilities.")
+        return 1.0
+    temperature = float(json.loads(config_path.read_text(encoding="utf-8")).get("temperature", 1.0))
+    if temperature <= 0:
+        raise ValueError(f"Invalid temperature in {config_path}: {temperature}")
+    print(f"Using calibration temperature {temperature:.4f}")
+    return temperature
+
+
+TEMPERATURE = load_temperature(MODEL_DIR)
+
+
 def detect(text: str):
     text = (text or "").strip()
     if not text:
@@ -49,7 +71,8 @@ def detect(text: str):
 
     encoded = tokenizer(text, truncation=True, max_length=MAX_LENGTH, return_tensors="pt")
     with torch.inference_mode():
-        probs = torch.softmax(model(**encoded).logits, dim=-1)[0].tolist()
+        logits = model(**encoded).logits / TEMPERATURE
+        probs = torch.softmax(logits, dim=-1)[0].tolist()
 
     notes = []
     words = len(text.split())
