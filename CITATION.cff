@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+message: "If you use this project, please cite it as below."
+title: "German AI Text Detector: Distinguishing Human-Written, AI-Generated and AI-Assisted German Text"
+type: software
+authors:
+  - family-names: Hijazi
+    given-names: Hassan
+  - family-names: Issa
+    given-names: Ali
+repository-code: "https://github.com/HassanHijaze/german-ai-text-detector-from-scratch"
+url: "https://huggingface.co/HassanHijazi"
+license: MIT
+date-released: 2026-11-06
+keywords:
+  - AI text detection
+  - AI-assisted writing
+  - German
+  - natural language processing
+  - text classification
+  - transformers
+abstract: >-
+  A three-class machine learning project that classifies German text as
+  human-written, AI-generated, or AI-assisted (human text rewritten by a
+  language model). It compares six supervised models and a zero-shot LLM
+  baseline on 30,629 German academic texts, evaluates generalization on
+  out-of-distribution data, and provides a Docker web app for the detector.
