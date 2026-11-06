@@ -104,7 +104,7 @@ A CUDA-enabled GPU is recommended for evaluating the transformer models.
 
 ## Notebook
 
-Run the analysis from the project directory after downloading the model artifacts:
+Run the analysis from the project directory after downloading the trained models from Hugging Face: [TF-IDF + Logistic Regression](https://huggingface.co/HassanHijazi/german-ai-text-tfidf-logreg), [DistilBERT German](https://huggingface.co/HassanHijazi/german-ai-text-distilbert-german), [GeLECTRA-large](https://huggingface.co/HassanHijazi/german-ai-text-gelectra-large), [mmBERT-base](https://huggingface.co/HassanHijazi/german-ai-text-mmbert-base), [mmBERT-small](https://huggingface.co/HassanHijazi/german-ai-text-mmbert-small) and [XLM-RoBERTa base](https://huggingface.co/HassanHijazi/german-ai-text-xlm-roberta-base):
 
 ```text
 ood_model_comparison.ipynb
