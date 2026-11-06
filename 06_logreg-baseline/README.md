@@ -55,7 +55,7 @@ The largest performance drop occurs for texts of **70 words or fewer**, where AI
 
 The trained three-class model is available on [**Hugging Face**](https://huggingface.co/HassanHijazi/german-ai-text-tfidf-logreg) and can be downloaded with `huggingface_hub` and loaded using `joblib`.
 
-To reproduce the training and evaluation locally, place the dataset at `data/hf-dataset-3class-full`, start JupyterLab from the repository root with `jupyter lab`, and run `06_logreg-baseline/logestic_regression.ipynb` from top to bottom.
+To reproduce the training and evaluation locally, place the dataset at `data/hf-dataset-3class-full`, start JupyterLab from the repository root with `jupyter lab`, and run `06_logreg-baseline/logistic_regression.ipynb` from top to bottom.
 
 No API key or GPU is required.
 
