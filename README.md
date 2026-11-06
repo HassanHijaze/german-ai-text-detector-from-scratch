@@ -85,10 +85,10 @@ Six supervised classifiers were trained or fine-tuned on the same three-class da
 | [GeLECTRA-large](https://huggingface.co/deepset/gelectra-large) | Transformer | ~335M |
 | Luna 6 (OpenAI API) | Zero-shot LLM baseline | Not publicly disclosed |
 
+\* Upper bound, not a measured count: the TF-IDF vectorizer keeps at most 200,000 features (word unigrams and bigrams), and Logistic Regression learns one weight per feature for each of the 3 classes (200,000 × 3 = 600,000, plus 3 intercepts). The actual vocabulary can be smaller.
 
 
 
-## Results
 
 ## Results
 
@@ -142,14 +142,14 @@ The following table reports overall classification error across all three classe
 
 `n` denotes the number of held-out test samples in each bin.
 
-| Text length | n | Luna 6 | TF-IDF + Logistic Regression | DistilBERT German | XLM-RoBERTa base | mmBERT-small | mmBERT-base | GeLECTRA-large |
+| Text length (words) | n | Luna 6 | TF-IDF + Logistic Regression | DistilBERT German | XLM-RoBERTa base | mmBERT-small | mmBERT-base | GeLECTRA-large |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
 | ≤70 | 399 | 44.11% | 23.06% | 16.79% | 17.04% | 12.03% | 10.53% | **9.27%** |
 | 71–150 | 293 | 39.59% | 8.19% | 9.90% | 8.87% | 4.44% | 3.41% | **2.73%** |
 | 151–300 | 640 | 42.34% | 7.03% | 7.81% | 8.28% | 4.38% | 3.12% | **2.34%** |
 | 301–500 | 342 | 48.83% | 5.26% | 6.14% | 5.56% | 1.17% | **0.58%** | 1.75% |
 | 501–750 | 653 | 44.87% | 5.82% | 7.50% | 6.43% | 1.99% | **1.53%** | 2.14% |
-| 750+ | 410 | 46.59% | 5.61% | 8.54% | 8.78% | **1.22%** | 1.95% | **1.22%** |
+| 751+ | 410 | 46.59% | 5.61% | 8.54% | 8.78% | **1.22%** | 1.95% | **1.22%** |
 
 The clearest pattern is that **very short texts are substantially harder to classify**. All supervised models show their highest error rates on texts of 70 words or fewer.
 
@@ -177,7 +177,7 @@ The clearest pattern is that **very short texts are substantially harder to clas
 
 - Inputs are truncated to **512 tokens**, meaning that for longer texts only the beginning of the document is used for classification.
 
-- The detector produces **probabilistic, not proof**. Its output should not be used on its own to accuse, penalize, grade, or otherwise make high-stakes decisions about individuals.
+- The detector produces **probabilistic estimates, not proof**. Its output should not be used on its own to accuse, penalize, grade, or otherwise make high-stakes decisions about individuals.
 
 
 
