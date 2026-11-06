@@ -99,7 +99,7 @@ pip install -r requirements.txt
 Then run the corresponding notebook in:
 
 ```text
-12_learning-curves/Notebooks/
+12_learning-curves/notebooks/
 ```
 
 Each notebook trains one model on the defined training subsets and saves the resulting learning-curve CSV file and figure.
