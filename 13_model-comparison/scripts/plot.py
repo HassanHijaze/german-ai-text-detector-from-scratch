@@ -203,7 +203,7 @@ def plot_hardest_by_length(meta, correct):
     ax.yaxis.set_major_formatter(PERCENT)
     ax.set_ylabel("Share of texts")
     ax.legend(loc="upper right")
-    set_title(ax, "Texts that fool every model are mostly short",
+    set_title(ax, "Texts that fool every model are often short",
               "Length distribution of the texts all models misclassify, compared with the whole test set.")
     save(fig, "hardest-texts-by-length")
 

@@ -17,7 +17,7 @@ Models compared: GeLECTRA-large, mmBERT-base, mmBERT-small, XLM-RoBERTa base and
 - **The models mostly agree.** 86.7% of the test texts are classified correctly by all five models, and only 31 texts (1.1%) fool every model.
 - **DeepSeek is the hardest generator** for every model, with error rates of 3.9–8.1% on its texts, compared with 0.2–3.4% for the other generators.
 - **Confidence is not a reliability signal.** When the models are wrong, they are still highly confident: between 66% and 90% of all wrong predictions have a confidence of 90% or more.
-- **Texts that fool every model are mostly short**, and most of them are human-written texts that all models label as AI-assisted.
+- **Texts that fool every model are often short:** 14 of the 31 have 70 words or fewer, against 15% of the whole test set. Most of them are human-written texts that all models label as AI-assisted.
 
 ## Results
 
@@ -113,7 +113,7 @@ The 31 texts that all five models misclassify are concentrated among short texts
 
 ## Limitations
 
-- **Checkpoints.** The predictions were made with the trained model files stored during the project. For mmBERT-base and DistilBERT German, these files give slightly different test results from the runs reported in the main README, so this comparison reflects those checkpoints.
+- **Checkpoints.** The predictions were made with the trained model files stored during the project. For four of the five models (all except mmBERT-small), these files give slightly different test accuracy from the runs reported in the main README (GeLECTRA-large 96.82% vs 96.89%, mmBERT-base 95.62% vs 96.64%, XLM-RoBERTa base 91.41% vs 91.09%, DistilBERT German 91.78% vs 90.83%). All results on this page, including the significance tests, refer to these checkpoints. In particular, the mmBERT-base checkpoint used here is about 1 point weaker than the reported one, so the GeLECTRA-large vs mmBERT-base result may not hold for the reported model.
 - **Independence.** McNemar's test treats every text as independent, but a human text and its AI-generated and AI-assisted versions are related. P-values close to 0.05, such as GeLECTRA-large vs mmBERT-small, should be read with caution.
 - **Single run.** Each model was trained once. Differences between models may shift slightly with other random seeds.
 - **Models covered.** TF-IDF + Logistic Regression and the Luna 6 zero-shot baseline are not part of this comparison.
