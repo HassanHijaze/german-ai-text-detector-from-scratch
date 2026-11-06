@@ -85,7 +85,7 @@ data/hf-dataset-3class-full
 Then open:
 
 ```text
-GPT_baseline.ipynb
+luna-6-baseline.ipynb
 ```
 
 and run the notebook cells in order.
