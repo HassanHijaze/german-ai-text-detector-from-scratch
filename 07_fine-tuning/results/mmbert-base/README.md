@@ -1,14 +1,12 @@
-[← 08 · DistilBERT German](https://github.com/HassanHijaze/german-ai-text-detector-from-scratch/blob/main/08_distilbert-german)
+[← Fine-tuning overview](../../README.md) · [Project index](../../../README.md)
 
-# 09 · mmBERT-base
+# mmBERT-base
 
 A fine-tuned transformer model for classifying German text as **Human**, **AI-generated**, or **AI-assisted**.
 
 The model is based on [`jhu-clsp/mmBERT-base`](https://huggingface.co/jhu-clsp/mmBERT-base) and uses a maximum sequence length of 512 tokens.
 
 ## Setup
-
-A fine-tuned mmBERT-base transformer classifier for German text.
 
 - Task: three-class sequence classification
 - Classes: Human, AI-generated, AI-assisted
@@ -55,18 +53,12 @@ Performance improves considerably as more text becomes available.
 | 151–300   | 640         | 96.88%       |
 | 301–500   | 342         | **99.42%**   |
 | 501–750   | 653         | 98.47%       |
-| 750+      | 410         | 98.05%       |
+| 751+      | 410         | 98.05%       |
 
 The largest performance drop occurs for texts of **70 words or fewer**. From around 150 words onward, accuracy remains consistently high at approximately **97–99%**.
 
-## How to Run
-
-The trained three-class model is available on [**Hugging Face**](https://huggingface.co/HassanHijazi/german-ai-text-mmbert-base) and can be loaded directly with `transformers`.
-
-To reproduce the training and evaluation locally, place the dataset at `data/hf-dataset-3class-full`, start JupyterLab from the repository root with `jupyter lab`, and run `09_mmbert-base/mmbert_base.ipynb` from top to bottom.
-
-A GPU is recommended for training and evaluation.
+Run: `python scripts/run.py mmbert-base` (from `07_fine-tuning/`) · [model on Hugging Face](https://huggingface.co/HassanHijazi/german-ai-text-mmbert-base)
 
 ---
 
-[← 08 · DistilBERT German](https://github.com/HassanHijaze/german-ai-text-detector-from-scratch/blob/main/08_distilbert-german) · [10 · XLM-RoBERTa base →](https://github.com/HassanHijaze/german-ai-text-detector-from-scratch/blob/main/10_xlm-roberta-base)
+[← Fine-tuning overview](../../README.md) · [Project index](../../../README.md)

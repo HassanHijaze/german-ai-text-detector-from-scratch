@@ -1,4 +1,4 @@
-[← 11 · GeLECTRA-large](https://github.com/HassanHijaze/german-ai-text-detector-from-scratch/blob/main/11_gelectra-large)
+[← 07 · Fine-tuning](https://github.com/HassanHijaze/german-ai-text-detector-from-scratch/blob/main/07_fine-tuning)
 
 # 12 · Learning Curves
 
@@ -108,4 +108,4 @@ A CUDA-enabled GPU is recommended for the transformer models. TF-IDF + Logistic 
 
 ---
 
-[← 11 · GeLECTRA-large](https://github.com/HassanHijaze/german-ai-text-detector-from-scratch/blob/main/11_gelectra-large) · [13 · Model Comparison →](https://github.com/HassanHijaze/german-ai-text-detector-from-scratch/blob/main/13_model-comparison)
+[← 07 · Fine-tuning](https://github.com/HassanHijaze/german-ai-text-detector-from-scratch/blob/main/07_fine-tuning) · [13 · Model Comparison →](https://github.com/HassanHijaze/german-ai-text-detector-from-scratch/blob/main/13_model-comparison)

@@ -1,14 +1,12 @@
-[← 10 · XLM-RoBERTa base](https://github.com/HassanHijaze/german-ai-text-detector-from-scratch/blob/main/10_xlm-roberta-base)
+[← Fine-tuning overview](../../README.md) · [Project index](../../../README.md)
 
-# 11 · GeLECTRA-large
+# GeLECTRA-large
 
 A fine-tuned transformer model for classifying German text as **Human**, **AI-generated**, or **AI-assisted**.
 
 The model is based on [`deepset/gelectra-large`](https://huggingface.co/deepset/gelectra-large) and uses a maximum sequence length of 512 tokens.
 
 ## Setup
-
-A fine-tuned GeLECTRA-large transformer classifier for German text.
 
 - Task: three-class sequence classification
 - Classes: Human, AI-generated, AI-assisted
@@ -57,18 +55,12 @@ Performance improves substantially as more text becomes available.
 | 151–300   | 640         | 97.66%       |
 | 301–500   | 342         | 98.25%       |
 | 501–750   | 653         | 97.86%       |
-| 750+      | 410         | **98.78%**   |
+| 751+      | 410         | **98.78%**   |
 
 The largest performance drop occurs for texts of **70 words or fewer**. For longer texts, accuracy remains consistently high at approximately **97–99%**.
 
-## How to Run
-
-The trained three-class model is available on [**Hugging Face**](https://huggingface.co/HassanHijazi/german-ai-text-gelectra-large) and can be loaded directly with `transformers`.
-
-To reproduce the training and evaluation locally, place the dataset at `data/hf-dataset-3class-full`, start JupyterLab from the repository root with `jupyter lab`, and run `11_gelectra-large/Gelectra_large.ipynb` from top to bottom.
-
-A GPU is recommended for training and evaluation.
+Run: `python scripts/run.py gelectra-large` (from `07_fine-tuning/`) · [model on Hugging Face](https://huggingface.co/HassanHijazi/german-ai-text-gelectra-large)
 
 ---
 
-[← 10 · XLM-RoBERTa base](https://github.com/HassanHijaze/german-ai-text-detector-from-scratch/blob/main/10_xlm-roberta-base) · [12 · Learning Curves →](https://github.com/HassanHijaze/german-ai-text-detector-from-scratch/blob/main/12_learning-curves)
+[← Fine-tuning overview](../../README.md) · [Project index](../../../README.md)

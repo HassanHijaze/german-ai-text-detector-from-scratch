@@ -198,11 +198,7 @@ The project is organized as numbered stages. Each folder has its own README with
 | 05 | [`05_luna-6-baseline`](./05_luna-6-baseline/) | Zero-shot LLM baseline (Luna 6) |
 | 06 | [`06_logreg-baseline`](./06_logreg-baseline/) | TF-IDF + Logistic Regression baseline |
 | **Transformers** | | |
-| 07 | [`07_mmbert-small`](./07_mmbert-small/) | Fine-tune mmBERT-small |
-| 08 | [`08_distilbert-german`](./08_distilbert-german/) | Fine-tune DistilBERT German |
-| 09 | [`09_mmbert-base`](./09_mmbert-base/) | Fine-tune mmBERT-base |
-| 10 | [`10_xlm-roberta-base`](./10_xlm-roberta-base/) | Fine-tune XLM-RoBERTa base |
-| 11 | [`11_gelectra-large`](./11_gelectra-large/) | Fine-tune GeLECTRA-large |
+| 07 | [`07_fine-tuning`](./07_fine-tuning/) | Fine-tune and evaluate the five transformer models |
 | **Evaluation** | | |
 | 12 | [`12_learning-curves`](./12_learning-curves/) | Performance across training-set sizes |
 | 13 | [`13_model-comparison`](./13_model-comparison/) | Text-level comparison on the test set |

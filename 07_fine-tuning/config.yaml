@@ -1,0 +1,50 @@
+# Shared fine-tuning settings for the five transformer models.
+# These are the settings used in the original notebooks 07–11 (see archive/).
+
+# Paths are relative to the repository root.
+dataset_path: data/hf-dataset-3class-full
+
+# Dataset labels. model_label is the name stored in the model's config.json
+# (id2label), exactly as in the notebooks and the Hugging Face models.
+labels:
+  0: {name: human, display: Human, model_label: HUMAN}
+  1: {name: ai_generated, display: AI-generated, model_label: AI}
+  2: {name: ai_assisted, display: AI-assisted, model_label: AI_ASSISTED}
+
+training:
+  learning_rate: 2.0e-5
+  per_device_train_batch_size: 8
+  per_device_eval_batch_size: 16
+  num_train_epochs: 3
+  weight_decay: 0.01
+  warmup_steps: 235
+  early_stopping_patience: 1
+  metric_for_best_model: accuracy
+  seed: 17                  # used for seed, data_seed and transformers.set_seed
+  max_length: 512
+  precision: auto           # bf16 if the GPU supports it, else fp16 on GPU, fp32 on CPU
+  save_total_limit: 2
+  logging_steps: 100
+
+# Short name -> base model and the published fine-tuned model on Hugging Face.
+models:
+  mmbert-small:
+    display_name: mmBERT-small
+    base_model: jhu-clsp/mmBERT-small
+    hf_repo: HassanHijazi/german-ai-text-mmbert-small
+  distilbert-german:
+    display_name: DistilBERT German
+    base_model: distilbert/distilbert-base-german-cased
+    hf_repo: HassanHijazi/german-ai-text-distilbert-german
+  mmbert-base:
+    display_name: mmBERT-base
+    base_model: jhu-clsp/mmBERT-base
+    hf_repo: HassanHijazi/german-ai-text-mmbert-base
+  xlm-roberta-base:
+    display_name: XLM-RoBERTa base
+    base_model: FacebookAI/xlm-roberta-base
+    hf_repo: HassanHijazi/german-ai-text-xlm-roberta-base
+  gelectra-large:
+    display_name: GeLECTRA-large
+    base_model: deepset/gelectra-large
+    hf_repo: HassanHijazi/german-ai-text-gelectra-large

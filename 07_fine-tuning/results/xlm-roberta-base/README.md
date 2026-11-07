@@ -1,14 +1,12 @@
-[← 09 · mmBERT-base](https://github.com/HassanHijaze/german-ai-text-detector-from-scratch/blob/main/09_mmbert-base)
+[← Fine-tuning overview](../../README.md) · [Project index](../../../README.md)
 
-# 10 · XLM-RoBERTa base
+# XLM-RoBERTa base
 
 A fine-tuned transformer model for classifying German text as **Human**, **AI-generated**, or **AI-assisted**.
 
 The model is based on [`FacebookAI/xlm-roberta-base`](https://huggingface.co/FacebookAI/xlm-roberta-base) and uses a maximum sequence length of 512 tokens.
 
 ## Setup
-
-A fine-tuned XLM-RoBERTa transformer classifier for German text.
 
 - Task: three-class sequence classification
 - Classes: Human, AI-generated, AI-assisted
@@ -55,18 +53,12 @@ Performance varies with text length, with very short texts being the most diffic
 | 151–300   | 640         | 91.72%       |
 | 301–500   | 342         | **94.44%**   |
 | 501–750   | 653         | 93.57%       |
-| 750+      | 410         | 91.22%       |
+| 751+      | 410         | 91.22%       |
 
 The largest performance drop occurs for texts of **70 words or fewer**. Performance improves substantially for longer texts, reaching its highest accuracy for samples between **301 and 500 words**.
 
-## How to Run
-
-The trained three-class model is available on [**Hugging Face**](https://huggingface.co/HassanHijazi/german-ai-text-xlm-roberta-base) and can be loaded directly with `transformers`.
-
-To reproduce the training and evaluation locally, place the dataset at `data/hf-dataset-3class-full`, start JupyterLab from the repository root with `jupyter lab`, and run `10_xlm-roberta-base/xlm_roberta_base.ipynb` from top to bottom.
-
-A GPU is recommended for training and evaluation.
+Run: `python scripts/run.py xlm-roberta-base` (from `07_fine-tuning/`) · [model on Hugging Face](https://huggingface.co/HassanHijazi/german-ai-text-xlm-roberta-base)
 
 ---
 
-[← 09 · mmBERT-base](https://github.com/HassanHijaze/german-ai-text-detector-from-scratch/blob/main/09_mmbert-base) · [11 · GeLECTRA-large →](https://github.com/HassanHijaze/german-ai-text-detector-from-scratch/blob/main/11_gelectra-large)
+[← Fine-tuning overview](../../README.md) · [Project index](../../../README.md)

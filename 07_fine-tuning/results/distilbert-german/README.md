@@ -1,14 +1,12 @@
-[← 07 · mmBERT-small](https://github.com/HassanHijaze/german-ai-text-detector-from-scratch/blob/main/07_mmbert-small)
+[← Fine-tuning overview](../../README.md) · [Project index](../../../README.md)
 
-# 08 · DistilBERT German
+# DistilBERT German
 
 A fine-tuned transformer model for classifying German text as **Human**, **AI-generated**, or **AI-assisted**.
 
 The model is based on [`distilbert/distilbert-base-german-cased`](https://huggingface.co/distilbert/distilbert-base-german-cased) and uses a maximum sequence length of 512 tokens.
 
 ## Setup
-
-A fine-tuned DistilBERT transformer classifier for German text.
 
 - Task: three-class sequence classification
 - Classes: Human, AI-generated, AI-assisted
@@ -44,18 +42,12 @@ Performance varies with text length, with very short texts being the most diffic
 | 151–300 | 640 | 92.19% | 7.81% |
 | 301–500 | 342 | **93.86%** | **6.14%** |
 | 501–750 | 653 | 92.50% | 7.50% |
-| 750+ | 410 | 91.46% | 8.54% |
+| 751+ | 410 | 91.46% | 8.54% |
 
 The largest performance drop occurs for texts of **70 words or fewer**. Performance is substantially more stable once more text is available.
 
-## How to Run
-
-The trained three-class model is available on [**Hugging Face**](https://huggingface.co/HassanHijazi/german-ai-text-distilbert-german) and can be loaded directly with `transformers`.
-
-To reproduce the training and evaluation locally, place the dataset at `data/hf-dataset-3class-full`, start JupyterLab from the repository root with `jupyter lab`, and run `08_distilbert-german/distilbert_base_german_cased.ipynb` from top to bottom.
-
-A GPU is recommended for training and evaluation.
+Run: `python scripts/run.py distilbert-german` (from `07_fine-tuning/`) · [model on Hugging Face](https://huggingface.co/HassanHijazi/german-ai-text-distilbert-german)
 
 ---
 
-[← 07 · mmBERT-small](https://github.com/HassanHijaze/german-ai-text-detector-from-scratch/blob/main/07_mmbert-small) · [09 · mmBERT-base →](https://github.com/HassanHijaze/german-ai-text-detector-from-scratch/blob/main/09_mmbert-base)
+[← Fine-tuning overview](../../README.md) · [Project index](../../../README.md)

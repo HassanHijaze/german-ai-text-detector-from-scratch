@@ -61,4 +61,4 @@ No API key or GPU is required.
 
 ---
 
-[← 05 · Luna 6 Zero-Shot Baseline](../05_luna-6-baseline/) · [07 · mmBERT-small →](../07_mmbert-small/)
+[← 05 · Luna 6 Zero-Shot Baseline](../05_luna-6-baseline/) · [07 · Fine-tuning →](../07_fine-tuning/)
