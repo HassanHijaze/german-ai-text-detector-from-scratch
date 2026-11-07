@@ -1,6 +1,6 @@
-[← 12 · Learning Curves](../12_learning-curves/)
+[← 08 · Learning Curves](../08_learning-curves/)
 
-# 13 · Model Comparison
+# 09 · Model Comparison
 
 This stage compares the five fine-tuned transformer models **text by text** on the same 2,737 held-out test texts. Instead of only comparing overall scores, it asks:
 
@@ -121,7 +121,7 @@ The 31 texts that all five models misclassify are concentrated among short texts
 ## Files
 
 ```text
-13_model-comparison/
+09_model-comparison/
 ├── predictions/                       one CSV per model, one row per test text
 │   ├── gelectra-large-test-predictions.csv
 │   ├── mmbert-base-test-predictions.csv
@@ -147,7 +147,7 @@ From the repository root:
 
 ```bash
 pip install -r requirements.txt
-cd 13_model-comparison
+cd 09_model-comparison
 python scripts/run.py
 ```
 
@@ -155,6 +155,6 @@ This prints all statistics and saves the six figures to `results/`.
 
 <div align="center">
 
-[← 12 · Learning Curves](../12_learning-curves/) · [Project index](../README.md) · [14 · OOD Model Comparison →](../14_ood-model-comparison/)
+[← 08 · Learning Curves](../08_learning-curves/) · [Project index](../README.md) · [10 · OOD Model Comparison →](../10_ood-model-comparison/)
 
 </div>

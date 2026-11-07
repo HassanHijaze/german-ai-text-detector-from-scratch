@@ -1,10 +1,10 @@
-[← 14 · OOD Model Comparison](../14_ood-model-comparison/)
+[← 10 · OOD Model Comparison](../10_ood-model-comparison/)
 
-# 15 · Deployment
+# 11 · Deployment
 
 A small web app that classifies German text as **Human**, **AI-generated** or **AI-assisted**, packaged as a Docker container.
 
-It uses the fine-tuned **mmBERT-base** model, the project's most robust model on new kinds of text (see [13 · Model Comparison](../13_model-comparison/) and [14 · OOD Model Comparison](../14_ood-model-comparison/)).
+It uses the fine-tuned **mmBERT-base** model, the project's most robust model on new kinds of text (see [09 · Model Comparison](../09_model-comparison/) and [10 · OOD Model Comparison](../10_ood-model-comparison/)).
 
 ## Features
 
@@ -23,7 +23,7 @@ It uses the fine-tuned **mmBERT-base** model, the project's most robust model on
 Requires [Docker](https://www.docker.com/products/docker-desktop/).
 
 ```bash
-cd 15_deployment
+cd 11_deployment
 docker build -t german-ai-text-detector .
 docker run -p 7860:7860 german-ai-text-detector
 ```
@@ -68,7 +68,7 @@ docker build --build-arg MODEL_ID=HassanHijazi/german-ai-text-gelectra-large -t 
 ## Files
 
 ```text
-15_deployment/
+11_deployment/
 ├── Dockerfile          builds the image and downloads the model
 ├── app.py              the Gradio web app
 ├── requirements.txt    Python packages (PyTorch is installed in the Dockerfile)
@@ -85,6 +85,6 @@ docker build --build-arg MODEL_ID=HassanHijazi/german-ai-text-gelectra-large -t 
 
 <div align="center">
 
-[← 14 · OOD Model Comparison](../14_ood-model-comparison/) · [Project index](../README.md)
+[← 10 · OOD Model Comparison](../10_ood-model-comparison/) · [Project index](../README.md)
 
 </div>

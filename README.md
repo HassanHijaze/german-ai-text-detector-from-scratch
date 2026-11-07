@@ -36,12 +36,12 @@ Runs locally with Docker. No GPU needed.
 
 ```bash
 git clone https://github.com/HassanHijaze/german-ai-text-detector-from-scratch.git
-cd german-ai-text-detector-from-scratch/15_deployment
+cd german-ai-text-detector-from-scratch/11_deployment
 docker build -t german-ai-text-detector .
 docker run -p 7860:7860 german-ai-text-detector
 ```
 
-Open **http://localhost:7860**, paste a German text, and click **Detect**. Details: [15 · Deployment](./15_deployment/).
+Open **http://localhost:7860**, paste a German text, and click **Detect**. Details: [11 · Deployment](./11_deployment/).
 
 ### Use a model in Python
 
@@ -111,7 +111,7 @@ Overall error across all three classes. `n` = number of test texts in each lengt
 <details>
 <summary><b>Learning curves (validation accuracy with 100% of the training data)</b></summary>
 
-Each model was trained on 1%, 5%, 12%, 17.5%, 25%, 50% and 100% of the training data. Full curves: [12 · Learning Curves](./12_learning-curves/).
+Each model was trained on 1%, 5%, 12%, 17.5%, 25%, 50% and 100% of the training data. Full curves: [08 · Learning Curves](./08_learning-curves/).
 
 | Model | Validation accuracy |
 |---|---:|
@@ -126,7 +126,7 @@ These are validation results, not test results.
 
 </details>
 
-More analyses: [13 · Model Comparison](./13_model-comparison/) (significance tests, errors by generator and source, confidence) and [14 · OOD Model Comparison](./14_ood-model-comparison/).
+More analyses: [09 · Model Comparison](./09_model-comparison/) (significance tests, errors by generator and source, confidence) and [10 · OOD Model Comparison](./10_ood-model-comparison/).
 
 ---
 
@@ -200,11 +200,11 @@ The project is organized as numbered stages. Each folder has its own README with
 | **Transformers** | | |
 | 07 | [`07_fine-tuning`](./07_fine-tuning/) | Fine-tune and evaluate the five transformer models |
 | **Evaluation** | | |
-| 12 | [`12_learning-curves`](./12_learning-curves/) | Performance across training-set sizes |
-| 13 | [`13_model-comparison`](./13_model-comparison/) | Text-level comparison on the test set |
-| 14 | [`14_ood-model-comparison`](./14_ood-model-comparison/) | Generalization to unseen domains |
+| 08 | [`08_learning-curves`](./08_learning-curves/) | Performance across training-set sizes |
+| 09 | [`09_model-comparison`](./09_model-comparison/) | Text-level comparison on the test set |
+| 10 | [`10_ood-model-comparison`](./10_ood-model-comparison/) | Generalization to unseen domains |
 | **Deployment** | | |
-| 15 | [`15_deployment`](./15_deployment/) | Run the detector as a Docker web app |
+| 11 | [`11_deployment`](./11_deployment/) | Run the detector as a Docker web app |
 
 ### Running the stages
 

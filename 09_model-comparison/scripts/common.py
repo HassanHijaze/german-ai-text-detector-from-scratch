@@ -1,4 +1,4 @@
-"""Shared settings and data loading for the step 13 model comparison."""
+"""Shared settings and data loading for the step 09 model comparison."""
 
 from pathlib import Path
 
@@ -6,8 +6,8 @@ import numpy as np
 import pandas as pd
 
 # ---------- Paths ----------
-SCRIPTS_DIR = Path(__file__).resolve().parent   # 13_model-comparison/scripts
-STEP_DIR = SCRIPTS_DIR.parent                     # 13_model-comparison
+SCRIPTS_DIR = Path(__file__).resolve().parent   # 09_model-comparison/scripts
+STEP_DIR = SCRIPTS_DIR.parent                     # 09_model-comparison
 REPO_ROOT = STEP_DIR.parent
 PRED_DIR = STEP_DIR / "predictions"
 FIG_DIR = STEP_DIR / "results"

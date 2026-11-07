@@ -1,4 +1,4 @@
-[← 06 · TF-IDF baseline](../06_logreg-baseline/) · [Project index](../README.md) · [12 · Learning Curves →](../12_learning-curves/)
+[← 06 · TF-IDF baseline](../06_logreg-baseline/) · [Project index](../README.md) · [08 · Learning Curves →](../08_learning-curves/)
 
 # Fine-tuning
 
@@ -54,6 +54,6 @@ New evaluation results are written to `results/<name>/new-run/`, so the reported
 
 <div align="center">
 
-[← 06 · TF-IDF baseline](../06_logreg-baseline/) · [Project index](../README.md) · [12 · Learning Curves →](../12_learning-curves/)
+[← 06 · TF-IDF baseline](../06_logreg-baseline/) · [Project index](../README.md) · [08 · Learning Curves →](../08_learning-curves/)
 
 </div>

@@ -1,6 +1,6 @@
 [← 07 · Fine-tuning](https://github.com/HassanHijaze/german-ai-text-detector-from-scratch/blob/main/07_fine-tuning)
 
-# 12 · Learning Curves
+# 08 · Learning Curves
 
 This stage evaluates how the six supervised models improve as the amount of available training data increases.
 
@@ -99,7 +99,7 @@ pip install -r requirements.txt
 Then run the corresponding notebook in:
 
 ```text
-12_learning-curves/notebooks/
+08_learning-curves/notebooks/
 ```
 
 Each notebook trains one model on the defined training subsets and saves the resulting learning-curve CSV file and figure.
@@ -108,4 +108,4 @@ A CUDA-enabled GPU is recommended for the transformer models. TF-IDF + Logistic 
 
 ---
 
-[← 07 · Fine-tuning](https://github.com/HassanHijaze/german-ai-text-detector-from-scratch/blob/main/07_fine-tuning) · [13 · Model Comparison →](https://github.com/HassanHijaze/german-ai-text-detector-from-scratch/blob/main/13_model-comparison)
+[← 07 · Fine-tuning](https://github.com/HassanHijaze/german-ai-text-detector-from-scratch/blob/main/07_fine-tuning) · [09 · Model Comparison →](https://github.com/HassanHijaze/german-ai-text-detector-from-scratch/blob/main/09_model-comparison)

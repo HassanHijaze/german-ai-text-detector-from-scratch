@@ -1,6 +1,6 @@
-[← 13 · Model Comparison](../13_model-comparison/)
+[← 09 · Model Comparison](../09_model-comparison/)
 
-# 14 · OOD Model Comparison
+# 10 · OOD Model Comparison
 
 This stage evaluates the trained models on a separate out-of-distribution (OOD) dataset that was not used during training or the original held-out evaluation.
 
@@ -115,7 +115,7 @@ The notebook contains the complete OOD evaluation and automatically generates th
 ## Files
 
 ```text
-14_ood-model-comparison/
+10_ood-model-comparison/
 ├── 2-class-matrices/
 ├── 3-class-matrices/
 ├── tables/

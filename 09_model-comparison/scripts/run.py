@@ -1,4 +1,4 @@
-"""Run the whole step 13 model comparison from the saved prediction CSVs.
+"""Run the whole step 09 model comparison from the saved prediction CSVs.
 
     python scripts/run.py
 
