@@ -4,7 +4,7 @@
 
 A small web app that classifies German text as **Human**, **AI-generated** or **AI-assisted**, packaged as a Docker container.
 
-It uses the fine-tuned **mmBERT-base** model, the project's most robust model on new kinds of text (see [09 · Model Comparison](../09_model-comparison/) and [10 · OOD Model Comparison](../10_ood-model-comparison/)).
+It uses the fine-tuned **mmBERT-base** model, one of the project's two strongest models, recommended for its robustness to unseen human-text domains (see [09 · Model Comparison](../09_model-comparison/) and [10 · OOD Model Comparison](../10_ood-model-comparison/)).
 
 ## Features
 
@@ -54,7 +54,7 @@ scores, highlighted_html, notes = client.predict("Ihr deutscher Text …", api_n
 print(scores)
 ```
 
-`scores` contains the predicted class and the probability of each class.
+`scores` contains the length-weighted probability of each class over the whole text.
 
 ## Configuration
 

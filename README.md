@@ -73,6 +73,7 @@ All models were evaluated on the same **held-out test set (2,737 texts)**. The s
 | Luna 6 (GPT-6 Luna) | 55.64% | 50.83% | — | 1.42%¹ |
 
 **Human texts wrongly flagged:** share of human-written test texts classified as AI-generated or AI-assisted.
+
 ¹ Low only because Luna 6 rarely predicts AI at all; it misses most AI texts.
 
 **Recommended model: mmBERT-base.** GeLECTRA-large and mmBERT-base are on par: each was trained only once, and their differences are a few texts (7 of 2,737 on the test set, 2 of 869 on the OOD set). mmBERT-base is recommended for robustness, because it lost the least accuracy from the test set to unseen human-text domains. The web app uses mmBERT-base.
