@@ -9,12 +9,16 @@ It uses the fine-tuned **mmBERT-base** model, the project's most robust model on
 ## Features
 
 - **Web interface** built with Gradio: paste a text, click **Detect**, see the result.
-- **Probabilities** for all three classes, shown as bars.
-- **Coloured text**: the analysed text is shown on a soft background in the colour of the predicted class:
+- **Full text analysed in windows**: the text is split into sentences and classified in overlapping windows of about 100 words, so the whole text is analysed, however long it is. Each sentence gets the average of all windows that contain it (windows in which it sits near the centre count more).
+- **Coloured parts**: neighbouring sentences with the same class form one coloured part, so human and AI parts of a text are coloured differently:
   - light blue: Human
   - light yellow: AI-assisted
   - light red: AI-generated
-- **Warnings** for short texts (under 70 words), where results are much less reliable, and for long texts, where only the first 512 tokens are analysed.
+- **Percentages on hover**: hovering over a part shows its probability for each class.
+- **Share bar**: a bar above the text shows the share of the text (in words) for each class.
+- **Overall scores** for all three classes: a length-weighted average over all sentences.
+- **Calibrated probabilities**: temperature scaling with the model's `detector-config.json`, if the model has one; otherwise the raw (uncalibrated) probabilities are used.
+- **Warnings** for short texts (under 70 words), where results are much less reliable, and when a window is longer than 512 tokens.
 - **Runs offline**: the model is downloaded once, when the image is built.
 - **API included**: the app can also be called from other programs.
 
@@ -65,6 +69,8 @@ For example, to build the image with GeLECTRA-large instead:
 docker build --build-arg MODEL_ID=HassanHijazi/german-ai-text-gelectra-large -t german-ai-text-detector .
 ```
 
+Other models only get calibrated probabilities if their Hugging Face repo contains `detector-config.json` (DistilBERT German, for example, does not). The text on the page always names mmBERT-base, whichever model is built in.
+
 ## Files
 
 ```text
@@ -80,7 +86,7 @@ docker build --build-arg MODEL_ID=HassanHijazi/german-ai-text-gelectra-large -t 
 
 - The model was trained on **German academic texts**. Results on other kinds of text (social media, fiction, other languages) may be less reliable.
 - **Short texts** (under 70 words) are much harder to classify correctly.
-- Only the **first 512 tokens** of a text are analysed.
+- **Boundaries** between parts are accurate to about one sentence, and insertions of only one or two sentences may not be detected.
 - The result is a **probabilistic estimate, not proof**. It must not be used on its own to accuse, grade or make other high-stakes decisions about people.
 
 <div align="center">
