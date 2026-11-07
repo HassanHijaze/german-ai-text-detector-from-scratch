@@ -46,7 +46,7 @@ Performance improves substantially as more text becomes available.
 | 501–750   | 653         | 98.01% |
 | 751+      | 410         | **98.78%** |
 
-The largest performance drop occurs for texts of **70 words or fewer**. From around 150 words onward, accuracy remains consistently high at approximately **96–99%**.
+The largest performance drop occurs for texts of **70 words or fewer**. From 71 words onward, accuracy is about **95.6%** up to 300 words and **98–99%** above 300 words.
 
 Run: `python scripts/run.py mmbert-small` (from `07_fine-tuning/`) · [model on Hugging Face](https://huggingface.co/HassanHijazi/german-ai-text-mmbert-small)
 
