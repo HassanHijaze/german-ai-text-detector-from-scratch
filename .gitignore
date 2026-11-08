@@ -21,3 +21,4 @@ runs/
 wandb/
 artifacts/
 data/
+.pytest_cache/
