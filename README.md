@@ -1,5 +1,7 @@
 # German AI Text Detector
 
+[![tests](https://github.com/HassanHijaze/german-ai-text-detector-from-scratch/actions/workflows/tests.yml/badge.svg)](https://github.com/HassanHijaze/german-ai-text-detector-from-scratch/actions/workflows/tests.yml)
+
 Detects whether a German text is **human-written**, **AI-generated**, or **AI-assisted** (human text rewritten by an AI).
 
 Most detectors only separate "human" from "AI". This project adds a third class for **AI-assisted** writing, because polished human text is hard to tell apart from both human and AI writing.
@@ -23,6 +25,7 @@ Most detectors only separate "human" from "AI". This project adds a third class 
 - [Dataset](#dataset)
 - [Models](#models)
 - [Repository structure](#repository-structure)
+- [Running the tests](#running-the-tests)
 - [Limitations](#limitations)
 - [Authors and license](#authors-and-license)
 
@@ -218,6 +221,18 @@ pip install -r requirements.txt
 ```
 
 Copy `.env.example` to `.env` and add the API keys needed for the stages you want to run (AI text generation and the zero-shot baseline). The dataset is private, so stages that load it need access permission. The trained models are public.
+
+---
+
+## Running the tests
+
+```bash
+pip install -r requirements-dev.txt
+pytest                  # all tests
+pytest -m "not slow"    # skip the slow training test
+```
+
+The tests also run automatically on GitHub Actions for every push and pull request.
 
 ---
 
