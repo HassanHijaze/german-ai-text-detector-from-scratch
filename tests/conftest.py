@@ -13,12 +13,15 @@ so their code cannot be imported as normal packages. The fixtures below load it 
 
 import importlib
 import importlib.util
+import os
 import sys
 import types
 from pathlib import Path
 from unittest.mock import MagicMock
 
 import pytest
+
+os.environ.setdefault("MPLBACKEND", "Agg")  # draw figures without opening windows
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 FINE_TUNING_SCRIPTS = REPO_ROOT / "07_fine-tuning" / "scripts"
@@ -51,6 +54,18 @@ def ft():
 def mc():
     """09_model-comparison/scripts: common and analyze."""
     return load_stage_modules(MODEL_COMPARISON_SCRIPTS, ["common", "analyze"])
+
+
+@pytest.fixture
+def mc_full():
+    """All 09_model-comparison scripts (common, analyze, plot, run), freshly imported for one test."""
+    return load_stage_modules(MODEL_COMPARISON_SCRIPTS, ["common", "analyze", "plot", "run"])
+
+
+@pytest.fixture
+def ft_full():
+    """07_fine-tuning scripts common, train and evaluate, freshly imported for one test."""
+    return load_stage_modules(FINE_TUNING_SCRIPTS, ["common", "train", "evaluate"])
 
 
 # ---------- Stubs for 11_deployment/app.py ----------
