@@ -9,6 +9,8 @@ so their code cannot be imported as normal packages. The fixtures below load it 
 - 11_deployment/app.py loads a tokenizer and a model and builds a Gradio page when it is
   imported. ``transformers`` and ``gradio`` are replaced with small stubs while it loads,
   so no model is downloaded and no GPU or Gradio is needed.
+- The behavioral tests (tests/behavioral) use the real model instead: the session-scoped
+  ``detector`` fixture loads it once, from DETECTOR_MODEL (a local folder) or from Hugging Face.
 """
 
 import importlib
@@ -127,3 +129,74 @@ def app():
             else:
                 sys.modules[name] = original
     return module
+
+
+# ---------- Real model for the behavioral tests (tests/behavioral) ----------
+DEFAULT_DETECTOR_MODEL = "HassanHijazi/german-ai-text-mmbert-base"
+DETECTOR_MAX_LENGTH = 512  # same truncation as in training and evaluation
+
+# Model label names -> class names used in the tests
+DETECTOR_LABELS = {"HUMAN": "human", "AI": "ai_generated", "AI_ASSISTED": "ai_assisted"}
+
+
+class Detector:
+    """The fine-tuned detector, predicting like the evaluation in 07_fine-tuning/scripts/evaluate.py:
+    truncation at 512 tokens, logits divided by the calibration temperature, softmax."""
+
+    def __init__(self, source: str):
+        import torch
+        from transformers import AutoModelForSequenceClassification, AutoTokenizer
+
+        self.source = source
+        self.max_length = DETECTOR_MAX_LENGTH
+        self.device = "cuda" if torch.cuda.is_available() else "cpu"
+        self.tokenizer = AutoTokenizer.from_pretrained(source)
+        self.model = AutoModelForSequenceClassification.from_pretrained(source).to(self.device).eval()
+        self.labels = [DETECTOR_LABELS[self.model.config.id2label[i]] for i in range(self.model.config.num_labels)]
+        self.temperature = self._load_temperature(source)
+
+    @staticmethod
+    def _load_temperature(source: str) -> float:
+        """Temperature from detector-config.json (local folder or Hugging Face repo); 1.0 if there is none."""
+        import json
+
+        local = Path(source)
+        if local.is_dir():
+            config_path = local / "detector-config.json"
+            if not config_path.exists():
+                return 1.0
+        else:
+            from huggingface_hub import hf_hub_download
+            from huggingface_hub.errors import EntryNotFoundError
+
+            try:
+                config_path = Path(hf_hub_download(source, "detector-config.json"))
+            except EntryNotFoundError:
+                return 1.0
+        temperature = float(json.loads(config_path.read_text(encoding="utf-8")).get("temperature", 1.0))
+        assert temperature > 0, f"invalid temperature {temperature} in {config_path}"
+        return temperature
+
+    def num_tokens(self, text: str) -> int:
+        """Number of tokens without truncation (special tokens included)."""
+        return len(self.tokenizer(text)["input_ids"])
+
+    def probabilities(self, text: str) -> dict[str, float]:
+        """Calibrated probability of each class: {"human": ..., "ai_generated": ..., "ai_assisted": ...}."""
+        import torch
+
+        encoded = self.tokenizer(text, truncation=True, max_length=self.max_length, return_tensors="pt")
+        with torch.inference_mode():
+            logits = self.model(**encoded.to(self.device)).logits[0].double().cpu()
+        probs = torch.softmax(logits / self.temperature, dim=-1).tolist()
+        return dict(zip(self.labels, probs))
+
+    def predict(self, text: str) -> str:
+        probs = self.probabilities(text)
+        return max(probs, key=probs.get)
+
+
+@pytest.fixture(scope="session")
+def detector() -> Detector:
+    """The real detector, loaded once: from DETECTOR_MODEL (a local folder) if set, else from Hugging Face."""
+    return Detector(os.environ.get("DETECTOR_MODEL") or DEFAULT_DETECTOR_MODEL)
