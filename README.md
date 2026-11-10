@@ -233,10 +233,9 @@ pytest -m "not slow and not behavioral"   # quick run, skips the training test
 pytest -m behavioral                      # behavioral tests (MFT, INV, DIR) and the parity test on the real model
 ```
 
-The behavioral tests download mmBERT-base from Hugging Face on the first run (~1.2 GB). They include the training-serving parity test (`tests/integration/test_parity.py`), which checks that the evaluation pipeline and the web app give the same probabilities for the same texts. To use a local model instead, set `DETECTOR_MODEL` to its folder.
+Behavioral tests (MFT, INV, DIR) and the training-serving parity test use the real mmBERT-base, downloaded once from Hugging Face (~1.2 GB). To use a local model, set `DETECTOR_MODEL` to its folder.
 
-Both groups run on GitHub Actions for every push and pull request, as two parallel jobs: `pytest` runs `pytest -v`, and `behavioral` runs `pytest -m behavioral -v` on the CPU, with the Hugging Face model folder cached so mmBERT-base is downloaded only once.
-
+Both groups run automatically on GitHub Actions for every push, as two parallel jobs.
 ---
 
 ## Limitations
