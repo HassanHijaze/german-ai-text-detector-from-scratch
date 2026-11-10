@@ -28,19 +28,32 @@ from pathlib import Path
 
 import gradio as gr
 import torch
+from langdetect import DetectorFactory, LangDetectException
+from langdetect import detect as detect_language
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
+
+DetectorFactory.seed = 0  # make language detection deterministic
 
 MODEL_DIR = os.getenv("MODEL_DIR", "/app/model")
 PORT = int(os.getenv("PORT", "7860"))
 
 MAX_LENGTH = 512        # model input limit in tokens (same as in training)
+MIN_INPUT_WORDS = 50    # shorter inputs (counting only real words) are rejected with an error
 MIN_WORDS = 70          # below this, accuracy drops clearly (see the length analysis)
+MAX_WORDS = 3000        # longer inputs are rejected with an error
 WINDOW_WORDS = 100      # each window holds at least this many words (if the text is long enough)
 STRIDE_WORDS = 20       # a new window starts every ~20 words, so windows overlap strongly
 BATCH_SIZE = 8
 
 # Label order of the trained model: 0 = human, 1 = AI-generated, 2 = AI-assisted
 LABELS = ["Human", "AI-generated", "AI-assisted"]
+
+# Names for the languages langdetect reports most often (other codes are shown as they are)
+LANGUAGE_NAMES = {
+    "en": "English", "fr": "French", "es": "Spanish", "it": "Italian", "nl": "Dutch",
+    "pt": "Portuguese", "pl": "Polish", "da": "Danish", "sv": "Swedish", "no": "Norwegian",
+    "fi": "Finnish", "cs": "Czech", "tr": "Turkish", "ru": "Russian", "ar": "Arabic",
+}
 
 # Soft background colours (background, border)
 COLORS = {
@@ -106,6 +119,11 @@ def word_count(text: str) -> int:
     return len(text.split())
 
 
+def real_word_count(text: str) -> int:
+    """Number of tokens with at least one letter (ä, ö, ü, ß included); numbers and symbols alone do not count."""
+    return sum(any(char.isalpha() for char in token) for token in text.split())
+
+
 def paragraph_spans(text: str) -> list[tuple[int, int]]:
     """(start, end) of every non-empty paragraph; paragraphs are separated by empty lines."""
     spans, start = [], 0
@@ -165,6 +183,21 @@ def make_windows(words: list[int]) -> list[tuple[int, int]]:
     return windows
 
 
+# ---------- Input checks ----------
+def language_warning(text: str) -> str | None:
+    """A warning if the text does not look German. Only called for texts of at least
+    MIN_INPUT_WORDS real words, since language detection is unreliable on shorter texts."""
+    try:
+        language = detect_language(text)
+    except LangDetectException:
+        return None  # detection failed: no warning
+    if language == "de":
+        return None
+    name = LANGUAGE_NAMES.get(language, language)
+    return (f"⚠️ This text doesn't look German (detected: {name}). The model was trained only on "
+            "German texts, so the result may be unreliable.")
+
+
 # ---------- Output ----------
 def part_label(scores: dict) -> str:
     """The most likely class."""
@@ -215,6 +248,13 @@ def detect(text: str):
     text = (text or "").strip()
     if not text:
         raise gr.Error("Please enter a German text.")
+    n_real = real_word_count(text)
+    if n_real < MIN_INPUT_WORDS:
+        raise gr.Error(f"The text has {n_real} word{'' if n_real == 1 else 's'}. Please enter at least "
+                       f"{MIN_INPUT_WORDS} words; the detector needs more text to give a meaningful result.")
+    n_words = word_count(text)
+    if n_words > MAX_WORDS:
+        raise gr.Error(f"The text has {n_words:,} words. Please enter at most {MAX_WORDS:,} words.")
 
     sentences = sentence_spans(text)
     words = [word_count(text[s:e]) for s, e in sentences]
@@ -264,6 +304,9 @@ def detect(text: str):
         shares[sp["label"]] = shares.get(sp["label"], 0.0) + sp["words"] / total
 
     notes = []
+    warning = language_warning(text)
+    if warning:
+        notes.append(warning)
     if total < MIN_WORDS:
         notes.append(f"⚠️ Short text ({total} words). Results for texts under {MIN_WORDS} words are much less reliable.")
     if len(windows) > 1:
@@ -300,7 +343,7 @@ with gr.Blocks(title="German AI Text Detector") as demo:
     with gr.Row():
         with gr.Column(scale=3):
             text_in = gr.Textbox(label="German text", lines=12,
-                                 placeholder="Paste a German text here…")
+                                 placeholder=f"Paste a German text here ({MIN_INPUT_WORDS}–{MAX_WORDS:,} words)…")
             with gr.Row():
                 clear_btn = gr.ClearButton(text_in)
                 detect_btn = gr.Button("Detect", variant="primary")

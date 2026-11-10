@@ -19,6 +19,8 @@ It uses the fine-tuned **mmBERT-base** model, one of the project's two strongest
 - **Overall scores** for all three classes: a length-weighted average over all sentences.
 - **Calibrated probabilities**: temperature scaling with the model's `detector-config.json`, if the model has one; otherwise the raw (uncalibrated) probabilities are used.
 - **Warnings** for short texts (under 70 words), where results are much less reliable, and when a window is longer than 512 tokens.
+- **Language check**: texts that do not look German (detected with `langdetect`) get a warning; the prediction still runs.
+- **Length limits**: texts must have 50–3,000 words. Texts with fewer than 50 real words (only tokens with letters count, so numbers and symbols alone do not) or more than 3,000 words are rejected with an error instead of being cut off silently.
 - **Runs offline**: the model is downloaded once, when the image is built.
 - **API included**: the app can also be called from other programs.
 

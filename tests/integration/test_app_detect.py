@@ -58,7 +58,10 @@ def test_human_then_ai_parts_are_coloured_in_order(marker_app):
 
 # 24
 def test_short_text_shows_warning(app):
-    overall, body, notes = app.detect("Das ist ein kurzer Text mit nur wenigen Wörtern.")
+    # Between MIN_INPUT_WORDS (50, accepted) and MIN_WORDS (70, no warning)
+    text = " ".join(["Das ist ein kurzer Text mit nur wenigen Wörtern."] * 6)
+    assert app.MIN_INPUT_WORDS <= len(text.split()) < app.MIN_WORDS
+    overall, body, notes = app.detect(text)
     assert "Short text" in notes
     assert sum(overall.values()) == pytest.approx(1.0)
 
