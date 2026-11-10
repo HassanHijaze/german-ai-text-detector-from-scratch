@@ -1,0 +1,17 @@
+{
+  "source": "Extra INV texts, copied unchanged from the test split of hf-dataset-3class-full. They contain typographic quotes, numbers and cited names, which the demo texts do not, so the quote swap, number shift and name swap run on them.",
+  "texts": {
+    "human_test_id_327": {
+      "expected_class": "human",
+      "dataset_id": 327,
+      "split": "test",
+      "label": 0,
+      "source_name": "Refubium (FU Berlin)",
+      "title": "Auswirkungen der  von traditioneller Orientierung geprägten orientalischen Familien auf die soziale Integration ihrer Jugendlichen",
+      "source_url": "https://refubium.fu-berlin.de/handle/fub188/24571",
+      "license_name": "CC BY",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "text": "Einen weiteren Aspekt in diesen Diskurs bringt Esser (2000) ein, indem er die Hypothese aufstellt, dass die Staatsangehörigkeit einer Person einen entscheidenden Einfluss auf ihr Zugehörigkeitsgefühl und das Ausmaß ihrer erlebten Integration hat. Er postuliert, dass die Staatsangehörigkeit per se eine bestimmte Zugehörigkeit vorgibt und somit auch für Außenstehende ein klares Bild aufzeigt und es erleichtert, jemanden als zugehörig zu „definieren“. Darüber hinaus sagt Esser, dass jemand, der als zugehörig gedeutet und entsprechend behandelt wird, sich selbst auch zugehörig fühlt und eine erhöhte Motivation zur eigenen Integration aufweist. Letztere spiegelt sich dann beispielsweise in der eigenen Eingliederung in unterschiedliche gesellschaftliche Lebensbereiche der Aufnahmenation wider sowie in dem Eingehen interethnischer Beziehungen und der Tatsache, über die sozialen Kontakte hinaus auch in politischen und juristischen Bereichen bestimmte Rechte zugesichert zu bekommen und auf diese zurückzugreifen (Esser 2000: 285f). Zusammenfassend wird festgehalten, dass sich die Sozialintegration von Migrantinnen aus vier Ebenen zusammensetzt, welche in einem voneinander abhängigen Zusammenhang stehen."
+    }
+  }
+}

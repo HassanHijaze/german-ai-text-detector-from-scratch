@@ -1,7 +1,7 @@
 """INV (Invariance test): changes that are irrelevant to authorship must not change the prediction.
 
 Each perturbation is applied to each INV text: the three demo texts and the extra texts in
-data/inv_texts.json (a human test text with quotes, years and a cited author, so that the quote
+texts/inv_texts.json (a human test text with quotes, years and a cited author, so that the quote
 swap, number shift and name swap actually run). The original text must be predicted as its
 expected class, and the predicted class must stay the same after the change.
 The change of the top probability (the probability of the class predicted for the

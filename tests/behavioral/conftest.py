@@ -9,7 +9,7 @@ from pathlib import Path
 
 import pytest
 
-DATA_DIR = Path(__file__).parent / "data"
+TEXTS_DIR = Path(__file__).parent / "texts"
 CLASSES = ["human", "ai_generated", "ai_assisted"]
 
 RESULTS: list[dict] = []
@@ -17,7 +17,7 @@ RESULTS: list[dict] = []
 
 def load_demo_sentences() -> dict[str, list[str]]:
     """The three demo texts from the README GIF, as lists of sentences."""
-    return json.loads((DATA_DIR / "demo_texts.json").read_text(encoding="utf-8"))["texts"]
+    return json.loads((TEXTS_DIR / "demo_texts.json").read_text(encoding="utf-8"))["texts"]
 
 
 def join_sentences(sentences: list[str]) -> str:
@@ -37,7 +37,7 @@ def demo_texts(demo_sentences) -> dict[str, str]:
 @pytest.fixture(scope="session")
 def inv_texts(demo_texts) -> dict[str, dict]:
     """All INV texts: the demo texts plus the extra texts in inv_texts.json, as {name: {"text", "expected_class"}}."""
-    extra = json.loads((DATA_DIR / "inv_texts.json").read_text(encoding="utf-8"))["texts"]
+    extra = json.loads((TEXTS_DIR / "inv_texts.json").read_text(encoding="utf-8"))["texts"]
     texts = {label: {"text": text, "expected_class": label} for label, text in demo_texts.items()}
     texts.update({name: {"text": entry["text"], "expected_class": entry["expected_class"]} for name, entry in extra.items()})
     return texts
