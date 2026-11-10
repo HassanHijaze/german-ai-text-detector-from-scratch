@@ -228,14 +228,12 @@ Copy `.env.example` to `.env` and add the API keys needed for the stages you wan
 
 ```bash
 pip install -r requirements-dev.txt
-pytest                                    # all tests except the behavioral tests
-pytest -m "not slow and not behavioral"   # also skip the slow training test
-pytest -m behavioral                      # only the behavioral tests (MFT, INV, DIR) on the real model
+pytest                                    # all tests except behavioral (also runs on every push via GitHub Actions)
+pytest -m "not slow and not behavioral"   # quick run, skips the training test
+pytest -m behavioral                      # behavioral tests (MFT, INV, DIR) on the real model
 ```
 
-The behavioral tests (`tests/behavioral/`, CheckList-style: MFT, INV, DIR) use the real mmBERT-base model and download it from Hugging Face on the first run (~1.2 GB), so a plain `pytest` skips them (`addopts` in `pytest.ini`). Set `DETECTOR_MODEL` to a local model folder to use that instead. A `-m` on the command line replaces the default, so add `and not behavioral` when you select other tests with `-m`.
-
-The tests also run automatically on GitHub Actions for every push and pull request (without the behavioral tests).
+The behavioral tests download mmBERT-base from Hugging Face on the first run (~1.2 GB). To use a local model instead, set `DETECTOR_MODEL` to its folder.
 
 ---
 
