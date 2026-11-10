@@ -197,6 +197,12 @@ class Detector:
 
 
 @pytest.fixture(scope="session")
-def detector() -> Detector:
-    """The real detector, loaded once: from DETECTOR_MODEL (a local folder) if set, else from Hugging Face."""
-    return Detector(os.environ.get("DETECTOR_MODEL") or DEFAULT_DETECTOR_MODEL)
+def detector_model_source() -> str:
+    """Where the real model comes from: DETECTOR_MODEL (a local folder) if set, else the Hugging Face repo."""
+    return os.environ.get("DETECTOR_MODEL") or DEFAULT_DETECTOR_MODEL
+
+
+@pytest.fixture(scope="session")
+def detector(detector_model_source) -> Detector:
+    """The real detector, loaded once (see detector_model_source)."""
+    return Detector(detector_model_source)

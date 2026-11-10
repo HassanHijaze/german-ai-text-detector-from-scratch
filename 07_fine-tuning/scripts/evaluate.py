@@ -93,6 +93,16 @@ def predict_logits(model, tokenizer, tokenized_split, work_dir):
     return np.asarray(trainer.predict(tokenized_split).predictions)
 
 
+def predict_probabilities(model, tokenizer, texts, temperature, work_dir):
+    """Calibrated probabilities for a list of texts, with the same steps as evaluate():
+    tokenize_dataset (truncation at max_length), predict_logits and probabilities_from_logits."""
+    from datasets import Dataset, DatasetDict
+
+    split = DatasetDict({"train": Dataset.from_dict({"text": list(texts)})})  # tokenize_dataset expects a "train" split
+    tokenized = common.tokenize_dataset(split, tokenizer)["train"]
+    return probabilities_from_logits(predict_logits(model, tokenizer, tokenized, work_dir), temperature)
+
+
 # ---------- Metrics ----------
 def split_metrics(split, y_true, probabilities):
     import numpy as np

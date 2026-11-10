@@ -71,7 +71,7 @@ For example, to build the image with GeLECTRA-large instead:
 docker build --build-arg MODEL_ID=HassanHijazi/german-ai-text-gelectra-large -t german-ai-text-detector .
 ```
 
-Other models only get calibrated probabilities if their Hugging Face repo contains `detector-config.json` (DistilBERT German, for example, does not). The text on the page always names mmBERT-base, whichever model is built in.
+Other models only get calibrated probabilities if their Hugging Face repo contains `detector-config.json`. The text on the page always names mmBERT-base, whichever model is built in.
 
 ## Files
 

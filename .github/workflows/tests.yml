@@ -29,3 +29,47 @@ jobs:
 
       - name: Run the tests
         run: pytest -v
+
+  behavioral:
+    # Behavioral tests (MFT, INV, DIR) and the parity test on the real mmBERT-base, on the CPU
+    runs-on: ubuntu-24.04
+    env:
+      MODEL_ID: HassanHijazi/german-ai-text-mmbert-base
+
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v7
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            requirements-dev.txt
+
+      - name: Install CPU-only PyTorch
+        run: pip install torch --index-url https://download.pytorch.org/whl/cpu
+
+      - name: Install the dependencies
+        run: pip install -r requirements-dev.txt
+
+      # The model (~1.2 GB) is downloaded once and then restored from the cache
+      - name: Restore the Hugging Face model cache
+        id: hf-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: ~/.cache/huggingface
+          key: huggingface-${{ runner.os }}-${{ env.MODEL_ID }}
+
+      - name: Run the behavioral tests
+        run: pytest -m behavioral -v
+
+      # Saved even if a test fails, so the next run does not download the model again
+      - name: Save the Hugging Face model cache
+        if: always() && steps.hf-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: ~/.cache/huggingface
+          key: huggingface-${{ runner.os }}-${{ env.MODEL_ID }}
