@@ -233,9 +233,7 @@ pytest -m "not slow and not behavioral"   # quick run, skips the training test
 pytest -m behavioral                      # behavioral tests (MFT, INV, DIR) and the parity test on the real model
 ```
 
-Behavioral tests (MFT, INV, DIR) and the training-serving parity test use the real mmBERT-base, downloaded once from Hugging Face (~1.2 GB). To use a local model, set `DETECTOR_MODEL` to its folder.
-
-Both groups run automatically on GitHub Actions for every push, as two parallel jobs.
+Behavioral tests (MFT, INV, DIR) and the training-serving parity test use the real mmBERT-base, downloaded once from Hugging Face (~1.2 GB).
 ---
 
 ## Limitations
