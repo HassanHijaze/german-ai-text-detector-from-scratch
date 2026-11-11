@@ -46,18 +46,16 @@ docker run -p 7860:7860 german-ai-text-detector
 
 Open **http://localhost:7860**, paste a German text, and click **Detect**. Details: [11 · Deployment](./11_deployment/).
 
-### Use a model in Python
+### Models on Hugging Face
 
-All trained models are public on Hugging Face.
+All trained models are available on [Hugging Face](https://huggingface.co/HassanHijazi):
 
-```python
-from transformers import pipeline
-
-detector = pipeline("text-classification", model="HassanHijazi/german-ai-text-mmbert-base", top_k=None)
-print(detector("Ihr deutscher Text …", truncation=True, max_length=512))
-```
-
-The pipeline returns the labels `HUMAN`, `AI` (AI-generated) and `AI_ASSISTED`, without calibration (raw model probabilities, no temperature scaling).
+- [GeLECTRA-large](https://huggingface.co/HassanHijazi/german-ai-text-gelectra-large)
+- [mmBERT-base](https://huggingface.co/HassanHijazi/german-ai-text-mmbert-base)
+- [mmBERT-small](https://huggingface.co/HassanHijazi/german-ai-text-mmbert-small)
+- [XLM-RoBERTa base](https://huggingface.co/HassanHijazi/german-ai-text-xlm-roberta-base)
+- [DistilBERT German](https://huggingface.co/HassanHijazi/german-ai-text-distilbert-german)
+- [TF-IDF + Logistic Regression](https://huggingface.co/HassanHijazi/german-ai-text-tfidf-logreg)
 
 ---
 
