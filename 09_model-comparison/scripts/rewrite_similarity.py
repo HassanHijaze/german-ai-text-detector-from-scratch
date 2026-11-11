@@ -8,8 +8,12 @@ section 4). AI-assisted test texts only:
                       (found via seed_sample_id), with difflib.SequenceMatcher; 1.0 = unchanged
     by_generator      median similarity per generator
     by_similarity     mmBERT-base miss rate per similarity bin (missed = not predicted as AI-assisted)
+    deepseek_by_bin   mmBERT-base miss rate of DeepSeek vs the other generators within each similarity
+                      bin, with a Mantel-Haenszel test across the bins
     pedocs            within peDOCS: miss rate of DeepSeek vs each other generator, with counts and
                       Fisher's exact test, for all five transformers
+
+IDs can be numeric (human 46, its AI rows with seed_sample_id 46) or prefixed (human-46, assisted-46).
 
 Needs the dataset (texts and seed_sample_id) at data/hf-dataset-3class-full in the repository root,
 so it runs separately from run.py. Prints the tables and saves results/missed-by-similarity.png.
@@ -21,18 +25,86 @@ import re
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from scipy.stats import fisher_exact
+from scipy.stats import chi2, fisher_exact
 
 from common import COLORS, FIG_DIR, GEN_NAMES, MODELS, REPO_ROOT, prediction_path
 from plot import PERCENT, save, set_title
 
 DATASET_DIR = REPO_ROOT / "data" / "hf-dataset-3class-full"
-AI_ASSISTED = 2
+HUMAN, AI_ASSISTED = 0, 2
 MAIN_MODEL = "mmbert-base"
 DEEPSEEK = "deepseek-flash"
 
 SIM_BINS = [0, 0.6, 0.7, 0.8, 0.9, 1.0]
 SIM_LABELS = ["≤60%", "60–70%", "70–80%", "80–90%", ">90%"]
+PREFIXED_ID = re.compile(r"(?:human|assisted|generated)-(\d+)")
+
+
+# ---------- Pure helpers ----------
+def id_number(value) -> int:
+    """The human original's number from a numeric ID (46, 46.0, "46") or a prefixed one ("human-46")."""
+    if isinstance(value, str):
+        text = value.strip()
+        match = PREFIXED_ID.fullmatch(text)
+        if match:
+            return int(match.group(1))
+        if text.isdigit():
+            return int(text)
+        raise ValueError(f"Unrecognised id: {value!r}")
+    if value is None or pd.isna(value):
+        raise ValueError("Missing id")
+    if float(value) != int(value):
+        raise ValueError(f"Not a whole-number id: {value!r}")
+    return int(value)
+
+
+def original_number(row_id, seed_sample_id) -> int:
+    """Number of the human original of an AI row: seed_sample_id if set, otherwise a prefixed row id."""
+    if seed_sample_id is not None and not pd.isna(seed_sample_id) and seed_sample_id != "":
+        return id_number(seed_sample_id)
+    if isinstance(row_id, str) and PREFIXED_ID.fullmatch(row_id.strip()):
+        return id_number(row_id)
+    raise ValueError(f"No human original for id {row_id!r}: seed_sample_id is empty")
+
+
+def match_originals(assisted: pd.DataFrame, humans: pd.DataFrame) -> pd.Series:
+    """Text of the human original for every row of `assisted` (index aligned), in either id format."""
+    originals = {id_number(i): text for i, text in zip(humans["id"], humans["text"])}
+    numbers = [original_number(i, s) for i, s in zip(assisted["id"], assisted["seed_sample_id"])]
+    missing = [i for i, n in zip(assisted["id"], numbers) if n not in originals]
+    if missing:
+        raise ValueError(f"{len(missing)} AI-assisted texts have no human original, e.g. {missing[:5]}")
+    return pd.Series([originals[n] for n in numbers], index=assisted.index)
+
+
+def words(text: str) -> list[str]:
+    return re.findall(r"\w+", text.lower())
+
+
+def similarity(original: str, rewrite: str) -> float:
+    """Word-level similarity (1.0 = unchanged), as in Ali Issa's version."""
+    return difflib.SequenceMatcher(None, words(original), words(rewrite), autojunk=False).ratio()
+
+
+def similarity_bin(values: pd.Series) -> pd.Series:
+    """≤60%, 60–70%, 70–80%, 80–90%, >90%; each bin includes its upper edge (0.7 is in 60–70%)."""
+    return pd.cut(values, SIM_BINS, labels=SIM_LABELS, include_lowest=True)
+
+
+def mantel_haenszel(tables):
+    """Common odds ratio and continuity-corrected test p-value over 2×2 tables [[a, b], [c, d]]."""
+    num = den = deviation = variance = 0.0
+    for (a, b), (c, d) in tables:
+        n = a + b + c + d
+        if n < 2:
+            continue
+        num += a * d / n
+        den += b * c / n
+        deviation += a - (a + b) * (a + c) / n
+        variance += (a + b) * (c + d) * (a + c) * (b + d) / (n * n * (n - 1))
+    odds_ratio = num / den if den else np.inf
+    statistic = (abs(deviation) - 0.5) ** 2 / variance if variance else 0.0
+    return odds_ratio, float(chi2.sf(statistic, 1))
 
 
 # ---------- Data ----------
@@ -51,26 +123,11 @@ def load_texts():
     return pd.concat([dataset[name].select_columns(columns).to_pandas() for name in dataset], ignore_index=True)
 
 
-def words(text: str) -> list[str]:
-    return re.findall(r"\w+", text.lower())
-
-
-def similarity(original: str, rewrite: str) -> float:
-    """Word-level similarity (1.0 = unchanged), as in Ali Issa's version."""
-    return difflib.SequenceMatcher(None, words(original), words(rewrite), autojunk=False).ratio()
-
-
 def build_table(texts):
     """One row per AI-assisted test text: similarity to its human original and missed flag per model."""
     assisted = texts[(texts["split"] == "test") & (texts["label"] == AI_ASSISTED)].copy()
-    originals = texts[texts["label"] == 0].set_index("id")["text"]
-
-    missing = assisted.loc[~assisted["seed_sample_id"].isin(originals.index), "id"]
-    if len(missing):
-        raise ValueError(f"{len(missing)} AI-assisted test texts have no human original: {list(missing[:5])}")
-
-    assisted["similarity"] = [similarity(originals[int(seed)], text)
-                              for seed, text in zip(assisted["seed_sample_id"], assisted["text"])]
+    originals = match_originals(assisted, texts[texts["label"] == HUMAN])
+    assisted["similarity"] = [similarity(o, t) for o, t in zip(originals, assisted["text"])]
 
     for key, name in MODELS.items():
         pred = pd.read_csv(prediction_path(key)).set_index("id")["pred"]
@@ -88,8 +145,32 @@ def by_generator(table):
 
 
 def by_similarity(table, model):
-    bins = pd.cut(table["similarity"], SIM_BINS, labels=SIM_LABELS, include_lowest=True)
-    return table.groupby(bins, observed=False)[model].agg(texts="size", missed="sum", miss_rate="mean")
+    return table.groupby(similarity_bin(table["similarity"]), observed=False)[model].agg(
+        texts="size", missed="sum", miss_rate="mean")
+
+
+def deepseek_by_bin(table, model):
+    """Within each similarity bin: DeepSeek vs all other generators, plus a Mantel-Haenszel summary."""
+    bins = similarity_bin(table["similarity"])
+    is_deepseek = table["generator_model"] == DEEPSEEK
+    rows, tables = [], []
+    for label in SIM_LABELS:
+        in_bin = bins == label
+        ds, rest = table.loc[in_bin & is_deepseek, model], table.loc[in_bin & ~is_deepseek, model]
+        rows.append({
+            "bin": label,
+            "deepseek_missed": int(ds.sum()), "deepseek_texts": len(ds),
+            "deepseek_rate": ds.mean() if len(ds) else np.nan,
+            "other_missed": int(rest.sum()), "other_texts": len(rest),
+            "other_rate": rest.mean() if len(rest) else np.nan,
+        })
+        tables.append([[int(ds.sum()), int((~ds).sum())], [int(rest.sum()), int((~rest).sum())]])
+    result = pd.DataFrame(rows)
+    result["difference"] = result["deepseek_rate"] - result["other_rate"]
+
+    odds_ratio, p = mantel_haenszel(tables)
+    summary = {"mh_odds_ratio": odds_ratio, "mh_p": p}
+    return result, summary
 
 
 def pedocs_comparison(table):
@@ -131,7 +212,7 @@ def plot_missed_by_similarity(table, model):
 
 # ---------- Main ----------
 def percent(value):
-    return f"{value:.1%}"
+    return "–" if pd.isna(value) else f"{value:.1%}"
 
 
 def main():
@@ -146,6 +227,15 @@ def main():
     sim = by_similarity(table, main_name)
     print(f"\n== {main_name} miss rate per similarity bin")
     print(sim.to_string(formatters={"miss_rate": percent}))
+
+    per_bin, summary = deepseek_by_bin(table, main_name)
+    print(f"\n== {main_name}: DeepSeek vs the other generators at the same similarity")
+    shown = per_bin.copy()
+    for col in ["deepseek_rate", "other_rate"]:
+        shown[col] = shown[col].map(percent)
+    shown["difference"] = shown["difference"].map(lambda v: "–" if pd.isna(v) else f"{v * 100:+.1f} pts")
+    print(shown.to_string(index=False))
+    print(f"Across the bins (Mantel-Haenszel): odds ratio {summary['mh_odds_ratio']:.2f}, p = {summary['mh_p']:.4f}")
 
     pedocs = pedocs_comparison(table)
     print("\n== Within peDOCS: DeepSeek vs each other generator (Fisher's exact test, two-sided)")
@@ -166,7 +256,8 @@ def main():
     FIG_DIR.mkdir(parents=True, exist_ok=True)
     print(f"\nSaving figure to {FIG_DIR}")
     plot_missed_by_similarity(sim, main_name)
-    return {"table": table, "by_generator": by_generator(table), "by_similarity": sim, "pedocs": pedocs}
+    return {"table": table, "by_generator": by_generator(table), "by_similarity": sim,
+            "deepseek_by_bin": per_bin, "deepseek_summary": summary, "pedocs": pedocs}
 
 
 if __name__ == "__main__":

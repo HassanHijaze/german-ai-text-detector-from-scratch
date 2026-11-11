@@ -75,7 +75,16 @@ DeepSeek is the hardest generator for every model. DeepSeek’s texts come mostl
   <img src="results/missed-by-similarity.png" width="750" alt="AI-assisted texts missed by mmBERT-base, by rewrite similarity">
 </p>
 
-Miss rate of AI-assisted texts by how similar they are to the human original (mmBERT-base).
+Miss rate of AI-assisted texts by how similar they are to the human original (mmBERT-base). The top similarity bin is small (6 of 36 texts missed), so its rate is uncertain.
+
+Within peDOCS, mmBERT-base misses DeepSeek's AI-assisted texts more often than GPT-6 Luna's:
+
+| peDOCS, mmBERT-base | DeepSeek V4 Flash missed | Other generator missed | Fisher p |
+|---|---:|---:|---:|
+| DeepSeek vs GPT-5.6 Luna | 21 of 183 (11.5%) | 2 of 12 (16.7%) | 0.637 |
+| DeepSeek vs GPT-6 Luna | 21 of 183 (11.5%) | 1 of 73 (1.4%) | 0.006 |
+
+GPT-5.6 Luna has only 12 AI-assisted test texts in peDOCS and Gemini 3.8 Flash none, so only the comparison with GPT-6 Luna has enough texts to show a difference.
 
 ### Error rate by source
 

@@ -58,6 +58,12 @@ def mc():
     return load_stage_modules(MODEL_COMPARISON_SCRIPTS, ["common", "analyze"])
 
 
+@pytest.fixture(scope="session")
+def mc_rewrite():
+    """09_model-comparison/scripts: rewrite_similarity (with the common, analyze and plot it imports)."""
+    return load_stage_modules(MODEL_COMPARISON_SCRIPTS, ["common", "analyze", "plot", "rewrite_similarity"])
+
+
 @pytest.fixture
 def mc_full():
     """All 09_model-comparison scripts (common, analyze, plot, run), freshly imported for one test."""

@@ -1,4 +1,5 @@
-"""Holm correction, McNemar tests, error by group and prediction loading in 09_model-comparison/scripts/."""
+"""Holm correction, McNemar tests, error by group, prediction loading and rewrite similarity
+in 09_model-comparison/scripts/."""
 
 import numpy as np
 import pandas as pd
@@ -104,3 +105,64 @@ def test_mismatched_prediction_files_raise(mc, two_model_setup, ids_b, labels_b,
     write_predictions(two_model_setup / "model-b-test-predictions.csv", ids_b, labels_b)
     with pytest.raises(ValueError, match=message):
         mc.common.load_predictions()
+
+
+# ---------- rewrite_similarity.py (made-up examples, no dataset) ----------
+@pytest.mark.parametrize("value", [46, 46.0, np.int64(46), "46", " 46 ", "human-46", "assisted-46", "generated-46"])
+def test_id_number_reads_both_id_formats(mc_rewrite, value):
+    assert mc_rewrite.rewrite_similarity.id_number(value) == 46
+
+
+@pytest.mark.parametrize("value", [None, float("nan"), 46.5, "student-46", "human-", "abc"])
+def test_id_number_rejects_unusable_ids(mc_rewrite, value):
+    with pytest.raises(ValueError):
+        mc_rewrite.rewrite_similarity.id_number(value)
+
+
+def test_match_originals_numeric_ids(mc_rewrite):
+    # Numeric format: AI rows have their own ids; seed_sample_id (a float, empty for humans) points to the human id
+    humans = pd.DataFrame({"id": [46, 47], "text": ["Original 46", "Original 47"]})
+    assisted = pd.DataFrame({"id": [20437, 20438], "seed_sample_id": [47.0, 46.0]})
+    matched = mc_rewrite.rewrite_similarity.match_originals(assisted, humans)
+    assert matched.tolist() == ["Original 47", "Original 46"]
+
+
+def test_match_originals_prefixed_ids(mc_rewrite):
+    humans = pd.DataFrame({"id": ["human-46", "human-47"], "text": ["Original 46", "Original 47"]})
+    with_seed = pd.DataFrame({"id": ["assisted-47", "assisted-46"], "seed_sample_id": [47, 46]})
+    without_seed = pd.DataFrame({"id": ["assisted-47", "assisted-46"], "seed_sample_id": [None, None]})
+    rs = mc_rewrite.rewrite_similarity
+    assert rs.match_originals(with_seed, humans).tolist() == ["Original 47", "Original 46"]
+    assert rs.match_originals(without_seed, humans).tolist() == ["Original 47", "Original 46"]
+
+
+def test_match_originals_missing_original_raises(mc_rewrite):
+    humans = pd.DataFrame({"id": [46], "text": ["Original 46"]})
+    assisted = pd.DataFrame({"id": [20437], "seed_sample_id": [99.0]})
+    with pytest.raises(ValueError, match="no human original"):
+        mc_rewrite.rewrite_similarity.match_originals(assisted, humans)
+
+
+def test_similarity_identical_and_disjoint(mc_rewrite):
+    similarity = mc_rewrite.rewrite_similarity.similarity
+    assert similarity("Die Studie zeigt Effekte.", "Die Studie zeigt Effekte.") == 1.0
+    assert similarity("Die Studie zeigt Effekte.", "die studie, zeigt: Effekte") == 1.0   # case and punctuation ignored
+    assert similarity("eins zwei drei", "vier fünf sechs") == 0.0
+
+
+def test_similarity_one_word_changed(mc_rewrite):
+    # 3 of 4 words match in both texts: ratio = 2 * 3 / (4 + 4)
+    assert mc_rewrite.rewrite_similarity.similarity("a b c d", "a b x d") == pytest.approx(0.75)
+    assert mc_rewrite.rewrite_similarity.words("Größe, Übung; ß!") == ["größe", "übung", "ß"]
+
+
+def test_similarity_bin_edges(mc_rewrite):
+    values = pd.Series([0.0, 0.6, 0.6001, 0.7, 0.75, 0.9, 0.95, 1.0])
+    bins = mc_rewrite.rewrite_similarity.similarity_bin(values)
+    assert bins.astype(str).tolist() == ["≤60%", "≤60%", "60–70%", "60–70%", "70–80%", "80–90%", ">90%", ">90%"]
+
+
+def test_mantel_haenszel_single_table_odds_ratio(mc_rewrite):
+    odds_ratio, p = mc_rewrite.rewrite_similarity.mantel_haenszel([[[10, 90], [5, 95]]])
+    assert odds_ratio == pytest.approx(10 * 95 / (90 * 5))
+    assert 0 < p < 1

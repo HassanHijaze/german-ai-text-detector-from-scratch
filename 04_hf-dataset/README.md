@@ -46,44 +46,51 @@ source document appears in more than one split.
 
 ## How it was made
 
-- **Human texts:** chunks of 50–1,000 words that start and end on full 
+- **Human texts:** chunks of 35–1,050 words (mostly 50–1,000) that start and end on full 
 sentences, from SSOAR (social sciences), peDOCS (education research) and 
 Refubium (FU Berlin). Only open licences.
 - **AI texts:** GPT-5.6 Luna, GPT-6 Luna, Gemini 3.8 Flash and DeepSeek V4 
 Flash. Each model handled about a quarter of the human texts.
 - **AI-generated strategy:** GPT and Gemini saw the human text as 
-background material. DeepSeek only saw 3 topics extracted from it (see the 
-`strategy` column).
+background material. DeepSeek only saw 3 topics extracted from it (see 
+[02 · AI data](../02_ai-generated-data/)).
 
 
 ## Fields
 
 | field | description |
 |---|---|
-| `id` | `human-<n>`, `assisted-<n>` or `generated-<n>`, where `<n>` is the human original's ID |
+| `id` | Unique integer: human rows 1–10,227, AI-generated rows 10,228–20,436, AI-assisted rows 20,437–30,635. An AI row's `id` is not its human original's `id`; use `seed_sample_id` |
+| `file` | Path of the source file from the original generation run (not verified; folder names don’t always match the label) |
 | `text` | The text |
-| `label` | 0 = human, 1 = ai_generated, 2 = ai_assisted |
-| `seed_sample_id` | For AI rows: ID of the human original (empty for human rows) |
-| `source`, `source_name`, `document_id` | Repository and original document |
-| `title`, `author`, `publication_year`, `document_type` | The original document |
+| `label` | 0 = human, 1 = ai_generated, 2 = ai_assisted (an integer, not a class label) |
+| `seed_sample_id` | For AI rows: `id` of the human original (empty for human rows) |
+| `language`, `split` | Always `de`; `train`, `validation` or `test` |
+| `source`, `source_name`, `source_type`, `document_id` | Repository and original document |
+| `title`, `document_type`, `publication_date`, `date_basis` | The original document, and where its date comes from |
 | `license_name`, `license_url`, `source_url` | Licence and link to the original |
-| `target_length`, `word_count` | Planned and actual length in words |
-| `generator_model`, `generator_company`, `strategy` | Which model made an AI row, and how (`rewrite`, `source_based`, `topics`) |
+| `target_length`, `original_document_length` | Planned length of the human chunk (50, 150, 300, 600 or 1,000 words) and length of the original document (AI rows copy both from their human original) |
+| `actual_word_count`, `character_count` | Actual length of the text in words and characters |
+| `retrieval_date`, `hash` | When the original was downloaded, and the SHA-256 hash of the text |
+| `generator_provider`, `generator_model` | Which company and model made an AI row (empty for human rows) |
+
+This describes `data/hf-dataset-3class-full`, the dataset used to train and evaluate every model in this project. `build_hf_dataset.ipynb` in this folder builds a different version (`data/hf-dataset`, with string IDs such as `human-46` and `assisted-46`, and `author`, `publication_year`, `word_count`, `generator_company` and `strategy` columns).
 
 ## Load it
 
 ```python
-from datasets import load_dataset
+from datasets import load_from_disk
 
-ds = load_dataset("{{HF_REPO_ID}}")
-print(ds["train"].features["label"].names)  # ['human', 'ai_generated', 
-'ai_assisted']
+ds = load_from_disk("data/hf-dataset-3class-full")
+LABELS = {0: "human", 1: "ai_generated", 2: "ai_assisted"}  # label is a plain integer
+row = ds["train"][0]
+print(row["label"], LABELS[row["label"]])  # 0 human
 ```
 
 ## Licence and attribution
 
 Released under **CC BY-SA 4.0**, because part of the human texts are CC 
-BY-SA. Every row keeps the author, title, licence and source URL of the 
+BY-SA. Every row keeps the title, licence and source URL of the 
 original work it is based on.
 
 ## Limitations
