@@ -15,7 +15,7 @@ Models compared: GeLECTRA-large, mmBERT-base, mmBERT-small, XLM-RoBERTa base and
 
 - **Three performance tiers.** GeLECTRA-large is significantly better than every other model. mmBERT-base and mmBERT-small form a second tier, and XLM-RoBERTa base and DistilBERT German a third. Within each lower tier, the differences are not significant.
 - **The models mostly agree.** 86.7% of the test texts are classified correctly by all five models, and only 31 texts (1.1%) fool every model.
-- **DeepSeek is the hardest generator** for every model, with error rates of 3.9–8.1% on its texts, compared with 0.2–3.4% for the other generators. DeepSeek also used a different generation strategy (“topics” instead of “source_based”) and mostly peDOCS texts, so the effect can't be attributed to the generator alone.
+- **DeepSeek is the hardest generator** for every model, with error rates of 3.9–8.1% on its texts, compared with 0.2–3.4% for the other generators. DeepSeek’s texts come mostly from peDOCS in both AI classes, and for AI-generated texts it was also prompted differently (“topics” instead of “source_based”), so the effect can’t be attributed to the generator alone. The rewrite-similarity analysis shows that DeepSeek’s AI-assisted rewrites keep the most of the original wording, and lighter rewrites are missed more often.
 - **Confidence is not a reliability signal.** When the models are wrong, they are still highly confident: between 66% and 90% of all wrong predictions have a confidence of 90% or more.
 - **Texts that fool every model are often short:** 14 of the 31 have 70 words or fewer, against 15% of the whole test set. Most of them are human-written texts that all models label as AI-assisted.
 
@@ -69,7 +69,13 @@ AI-generated and AI-assisted test texts only.
 | GPT-5.6 Luna | 407 | 0.2% | 2.5% | 2.5% | 1.7% | 2.2% |
 | GPT-6 Luna | 526 | 0.6% | 2.7% | 2.5% | 2.5% | 3.4% |
 
-DeepSeek is the hardest generator for every model. DeepSeek also used a different generation strategy (“topics” instead of “source_based”) and mostly peDOCS texts, so the effect can't be attributed to the generator alone. GeLECTRA-large is almost error-free on both GPT generators.
+DeepSeek is the hardest generator for every model. DeepSeek’s texts come mostly from peDOCS in both AI classes, and for AI-generated texts it was also prompted differently (“topics” instead of “source_based”), so the effect can’t be attributed to the generator alone. The rewrite-similarity analysis shows that DeepSeek’s AI-assisted rewrites keep the most of the original wording, and lighter rewrites are missed more often. GeLECTRA-large is almost error-free on both GPT generators.
+
+<p align="center">
+  <img src="results/missed-by-similarity.png" width="750" alt="AI-assisted texts missed by mmBERT-base, by rewrite similarity">
+</p>
+
+Miss rate of AI-assisted texts by how similar they are to the human original (mmBERT-base).
 
 ### Error rate by source
 
@@ -128,12 +134,13 @@ The 31 texts that all five models misclassify are concentrated among short texts
 │   ├── mmbert-small-test-predictions.csv
 │   ├── xlm-roberta-base-test-predictions.csv
 │   └── distilbert-german-test-predictions.csv
-├── results/                           the six figures (PNG, 300 dpi)
+├── results/                           the seven figures (PNG, 300 dpi)
 ├── scripts/
 │   ├── common.py                      shared settings and data loading
 │   ├── analyze.py                     statistics (McNemar, agreement, error rates, confidence)
 │   ├── plot.py                        figures
-│   └── run.py                         runs analyze + plot
+│   ├── run.py                         runs analyze + plot
+│   └── rewrite_similarity.py          rewrite similarity vs missed AI-assisted texts; needs the dataset, run separately (adapted from Ali Issa's original analysis)
 └── README.md
 ```
 
@@ -141,7 +148,7 @@ Each prediction file contains `id`, `label`, `pred`, the three class probabiliti
 
 ## Run
 
-No GPU or trained models are needed; the scripts only read the prediction files.
+No GPU or trained models are needed. run.py only reads the prediction files; the rewrite-similarity analysis also needs the private dataset (see below).
 
 From the repository root:
 
@@ -152,6 +159,8 @@ python scripts/run.py
 ```
 
 This prints all statistics and saves the six figures to `results/`.
+
+The rewrite-similarity analysis needs the private dataset at `data/hf-dataset-3class-full` and runs separately: `python scripts/rewrite_similarity.py` (saves `results/missed-by-similarity.png`). Adapted from Ali Issa’s original analysis.
 
 <div align="center">
 
