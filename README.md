@@ -140,7 +140,7 @@ More analyses: [09 · Model Comparison](./09_model-comparison/) (significance te
 2. **Test accuracy does not guarantee robustness.** mmBERT-small drops from 95.9% on the test set to 81.1% on unseen human-text domains.
 3. **Short texts are hard.** Every supervised model makes its most errors on texts of 70 words or fewer.
 4. **AI-assisted text is harder to detect than AI-generated text**, because it keeps the human author's content and structure.
-5. **Some generators are harder than others.** Texts from DeepSeek V4 Flash are missed most often by every fine-tuned transformer. DeepSeek texts come mostly from peDOCS, so generator and source overlap.
+5. **Some generators are harder than others.** Texts from DeepSeek V4 Flash are missed most often by every fine-tuned transformer. DeepSeek also used a different generation strategy (“topics” instead of “source_based”) and its texts come mostly from peDOCS, so the effect can't be attributed to the generator alone.
 6. **Confidence is not proof.** When the models are wrong, they are usually still more than 90% confident.
 
 ---

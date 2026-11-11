@@ -15,7 +15,7 @@ Models compared: GeLECTRA-large, mmBERT-base, mmBERT-small, XLM-RoBERTa base and
 
 - **Three performance tiers.** GeLECTRA-large is significantly better than every other model. mmBERT-base and mmBERT-small form a second tier, and XLM-RoBERTa base and DistilBERT German a third. Within each lower tier, the differences are not significant.
 - **The models mostly agree.** 86.7% of the test texts are classified correctly by all five models, and only 31 texts (1.1%) fool every model.
-- **DeepSeek is the hardest generator** for every model, with error rates of 3.9–8.1% on its texts, compared with 0.2–3.4% for the other generators.
+- **DeepSeek is the hardest generator** for every model, with error rates of 3.9–8.1% on its texts, compared with 0.2–3.4% for the other generators. DeepSeek also used a different generation strategy (“topics” instead of “source_based”) and mostly peDOCS texts, so the effect can't be attributed to the generator alone.
 - **Confidence is not a reliability signal.** When the models are wrong, they are still highly confident: between 66% and 90% of all wrong predictions have a confidence of 90% or more.
 - **Texts that fool every model are often short:** 14 of the 31 have 70 words or fewer, against 15% of the whole test set. Most of them are human-written texts that all models label as AI-assisted.
 
@@ -69,7 +69,7 @@ AI-generated and AI-assisted test texts only.
 | GPT-5.6 Luna | 407 | 0.2% | 2.5% | 2.5% | 1.7% | 2.2% |
 | GPT-6 Luna | 526 | 0.6% | 2.7% | 2.5% | 2.5% | 3.4% |
 
-DeepSeek is the hardest generator for every model. GeLECTRA-large is almost error-free on both GPT generators.
+DeepSeek is the hardest generator for every model. DeepSeek also used a different generation strategy (“topics” instead of “source_based”) and mostly peDOCS texts, so the effect can't be attributed to the generator alone. GeLECTRA-large is almost error-free on both GPT generators.
 
 ### Error rate by source
 
