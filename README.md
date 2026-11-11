@@ -13,26 +13,7 @@ Detects whether a German text is **human-written**, **AI-generated**, or **AI-as
   <b>96.9%</b> test accuracy &nbsp;·&nbsp; <b>96.6%</b> on unseen human-text domains &nbsp;·&nbsp; <b>30,629</b> German texts &nbsp;·&nbsp; <b>6</b> models compared
 </p>
 
----
-
-## Quick start
-
-### Try the detector (web app)
-
-Runs locally with Docker. No GPU needed.
-
-```bash
-git clone https://github.com/HassanHijaze/german-ai-text-detector-from-scratch.git
-cd german-ai-text-detector-from-scratch/11_deployment
-docker build -t german-ai-text-detector .
-docker run -p 7860:7860 german-ai-text-detector
-```
-
-Open **http://localhost:7860**, paste a German text, and click **Detect**. Details: [11 · Deployment](./11_deployment/).
-
-### Models on Hugging Face
-
-All trained models are available on [Hugging Face](https://huggingface.co/HassanHijazi). See [Models](#models) for the full list.
+The best fine-tuned transformers get about 97 of 100 test texts right, while a general-purpose LLM simply asked to judge the text (Luna 6) gets only 56.
 
 ---
 
@@ -104,6 +85,27 @@ More analyses: [09 · Model Comparison](./09_model-comparison/) (significance te
 5. **Texts from some AI models are harder to catch.** Every fine-tuned transformer misses texts from DeepSeek V4 Flash most often. But DeepSeek was also prompted differently (“topics” instead of “source_based”: it saw only 3 topics, not the human text) and its texts come mostly from peDOCS, so the effect can't be attributed to the generator alone.
 6. **A confident answer can still be wrong.** When the models make a mistake, they are usually still more than 90% sure of their answer (before calibration).
 7. **What the model notices:** humans abbreviate and use plain connectors, while AI spells words out and writes more formally. For example, “bzw.” appears in 25% of human texts but only 0.3% of AI-generated ones, and when AI polishes a human text, “aber” usually becomes “jedoch” (in 80% of cases). AI-generated texts also share favourite words: “zugleich” appears in 61% of them, but only 10% of human texts. (From the TF-IDF model’s strongest features, checked on the full dataset.)
+
+---
+
+## Quick start
+
+### Try the detector (web app)
+
+Runs locally with Docker. No GPU needed.
+
+```bash
+git clone https://github.com/HassanHijaze/german-ai-text-detector-from-scratch.git
+cd german-ai-text-detector-from-scratch/11_deployment
+docker build -t german-ai-text-detector .
+docker run -p 7860:7860 german-ai-text-detector
+```
+
+Open **http://localhost:7860**, paste a German text, and click **Detect**. Details: [11 · Deployment](./11_deployment/).
+
+### Models on Hugging Face
+
+All trained models are available on [Hugging Face](https://huggingface.co/HassanHijazi). See [Models](#models) for the full list.
 
 ---
 
