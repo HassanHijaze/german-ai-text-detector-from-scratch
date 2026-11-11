@@ -4,8 +4,6 @@
 
 Detects whether a German text is **human-written**, **AI-generated**, or **AI-assisted** (human text rewritten by an AI).
 
-Most detectors only separate "human" from "AI". This project adds a third class for **AI-assisted** writing, because polished human text is hard to tell apart from both human and AI writing.
-
 <p align="center">
   <img src="assets/demo.gif" width="900" alt="Demo: the same passage classified as Human, AI-assisted and AI-generated">
 </p>
@@ -14,20 +12,6 @@ Most detectors only separate "human" from "AI". This project adds a third class 
 <p align="center">
   <b>96.9%</b> test accuracy &nbsp;·&nbsp; <b>96.6%</b> on unseen human-text domains &nbsp;·&nbsp; <b>30,629</b> German texts &nbsp;·&nbsp; <b>6</b> models compared
 </p>
-
----
-
-## Contents
-
-- [Quick start](#quick-start)
-- [Results](#results)
-- [Key findings](#key-findings)
-- [Dataset](#dataset)
-- [Models](#models)
-- [Repository structure](#repository-structure)
-- [Running the tests](#running-the-tests)
-- [Limitations](#limitations)
-- [Authors and license](#authors-and-license)
 
 ---
 
@@ -48,14 +32,7 @@ Open **http://localhost:7860**, paste a German text, and click **Detect**. Detai
 
 ### Models on Hugging Face
 
-All trained models are available on [Hugging Face](https://huggingface.co/HassanHijazi):
-
-- [GeLECTRA-large](https://huggingface.co/HassanHijazi/german-ai-text-gelectra-large)
-- [mmBERT-base](https://huggingface.co/HassanHijazi/german-ai-text-mmbert-base)
-- [mmBERT-small](https://huggingface.co/HassanHijazi/german-ai-text-mmbert-small)
-- [XLM-RoBERTa base](https://huggingface.co/HassanHijazi/german-ai-text-xlm-roberta-base)
-- [DistilBERT German](https://huggingface.co/HassanHijazi/german-ai-text-distilbert-german)
-- [TF-IDF + Logistic Regression](https://huggingface.co/HassanHijazi/german-ai-text-tfidf-logreg)
+All trained models are available on [Hugging Face](https://huggingface.co/HassanHijazi). See [Models](#models) for the full list.
 
 ---
 
@@ -77,7 +54,9 @@ All models were evaluated on the same **held-out test set (2,737 texts)**. The s
 
 ¹ Low only because Luna 6 rarely predicts AI at all; it misses most AI texts.
 
-**Recommended model: mmBERT-base.** GeLECTRA-large and mmBERT-base are on par: each was trained only once, and their differences are a few texts (7 of 2,737 on the test set, 2 of 869 on the OOD set). mmBERT-base is recommended for robustness, because it lost the least accuracy from the test set to unseen human-text domains. The web app uses mmBERT-base.
+The fine-tuned transformers’ probabilities are calibrated with temperature scaling (fitted on the validation set), which makes their confidence more realistic than the raw model outputs.
+
+**Recommended model: mmBERT-base**, for its robustness on unseen human-text domains. The web app uses it.
 
 <details>
 <summary><b>Error rate per class</b></summary>
@@ -110,40 +89,27 @@ Overall error across all three classes. `n` = number of test texts in each lengt
 
 </details>
 
-<details>
-<summary><b>Learning curves (validation accuracy with 100% of the training data)</b></summary>
-
-Each model was trained on 1%, 5%, 12%, 17.5%, 25%, 50% and 100% of the training data. Full curves: [08 · Learning Curves](./08_learning-curves/).
-
-| Model | Validation accuracy |
-|---|---:|
-| mmBERT-base | **96.25%** |
-| GeLECTRA-large | 95.84% |
-| mmBERT-small | 94.84% |
-| XLM-RoBERTa base | 91.60% |
-| TF-IDF + Logistic Regression | 91.33% |
-| DistilBERT German | 90.50% |
-
-These are validation results, not test results.
-
-</details>
+Learning curves (how accuracy grows with more training data): [08 · Learning Curves](./08_learning-curves/).
 
 More analyses: [09 · Model Comparison](./09_model-comparison/) (significance tests, errors by generator and source, confidence) and [10 · OOD Model Comparison](./10_ood-model-comparison/).
 
 ---
 
-## Key findings
+## What we found
 
-1. **GeLECTRA-large and mmBERT-base are on par.** GeLECTRA-large is slightly ahead on the test set and mmBERT-base on unseen human-text domains, but each model was trained only once and the differences are a few texts.
-2. **Test accuracy does not guarantee robustness.** mmBERT-small drops from 95.9% on the test set to 81.1% on unseen human-text domains.
-3. **Short texts are hard.** Every supervised model makes its most errors on texts of 70 words or fewer.
-4. **AI-assisted text is harder to detect than AI-generated text**, because it keeps the human author's content and structure.
-5. **Some generators are harder than others.** Texts from DeepSeek V4 Flash are missed most often by every fine-tuned transformer. DeepSeek also used a different generation strategy (“topics” instead of “source_based”) and its texts come mostly from peDOCS, so the effect can't be attributed to the generator alone.
-6. **Confidence is not proof.** When the models are wrong, they are usually still more than 90% confident.
+1. **The two best models are equally good.** GeLECTRA-large and mmBERT-base each get about 97 of 100 test texts right. GeLECTRA-large is slightly ahead on the test set and mmBERT-base on kinds of text it never saw in training, but each model was trained only once and the gap is just a few texts.
+2. **A good test score doesn't mean the model handles new kinds of text.** mmBERT-small gets 95.9% of the test texts right, but only 81.1% of texts from domains it never saw in training.
+3. **Short texts are hard.** Every trained model makes the most mistakes on texts of 70 words or fewer.
+4. **Text that an AI only polished is harder to catch than text an AI wrote from scratch**, because it keeps the human author's ideas and structure.
+5. **Texts from some AI models are harder to catch.** Every fine-tuned transformer misses texts from DeepSeek V4 Flash most often. But DeepSeek was also prompted differently (“topics” instead of “source_based”: it saw only 3 topics, not the human text) and its texts come mostly from peDOCS, so the effect can't be attributed to the generator alone.
+6. **A confident answer can still be wrong.** When the models make a mistake, they are usually still more than 90% sure of their answer (before calibration).
+7. **What the model notices:** humans abbreviate and use plain connectors, while AI spells words out and writes more formally. For example, “bzw.” appears in 25% of human texts but only 0.3% of AI-generated ones, and when AI polishes a human text, “aber” usually becomes “jedoch” (in 80% of cases). AI-generated texts also share favourite words: “zugleich” appears in 61% of them, but only 10% of human texts. (From the TF-IDF model’s strongest features, checked on the full dataset.)
 
 ---
 
 ## Dataset
+
+Most detectors only separate "human" from "AI". This project adds a third class for **AI-assisted** writing, because polished human text is hard to tell apart from both human and AI writing.
 
 **30,629 German academic texts**, balanced across three classes:
 
@@ -242,6 +208,7 @@ The behavioral and parity tests use the real mmBERT-base, downloaded once from H
 - **AI-assisted** here means a full rewrite of a human text by an AI. Other forms of AI help (e.g. editing single sentences) were not studied.
 - **Length:** the models and the evaluation use only the first 512 tokens of a text (the web app analyses the full text in overlapping windows), and texts under 70 words are much less reliable.
 - **Not proof:** the output is a probabilistic estimate. It must not be used on its own to accuse, grade or make other high-stakes decisions about people.
+- **Style:** because the models rely partly on style markers (e.g. abbreviations and informal connectors for human texts, formal wording for AI texts), a human who writes very formally may be classified as AI more often.
 
 ---
 
